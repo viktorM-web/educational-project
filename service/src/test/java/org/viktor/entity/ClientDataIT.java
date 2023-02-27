@@ -9,12 +9,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.viktor.util.HibernateTestUtil;
 
-import java.math.BigDecimal;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ClientDataIT {
-
     private static SessionFactory sessionFactory;
     private Session session;
 
@@ -30,51 +27,60 @@ public class ClientDataIT {
     }
 
     @Test
-    void saveCarCategory() {
-        CarCategoryEntity carCategory = buildCarCategory();
+    void saveClientData() {
+        UserEntity user = EntityUtil.buildUser();
+        session.save(user);
+        ClientDataEntity clientData = EntityUtil.buildClientData(user);
 
-        session.save(carCategory);
+        session.save(clientData);
 
-        assertThat(carCategory.getId()).isNotNull();
+        assertThat(clientData.getId()).isNotNull();
     }
 
     @Test
-    void getCarCategory() {
-        CarCategoryEntity expectedCarCategory = buildCarCategory();
-        session.save(expectedCarCategory);
+    void getClientData() {
+        UserEntity user = EntityUtil.buildUser();
+        session.save(user);
+        ClientDataEntity expectedClientData = EntityUtil.buildClientData(user);
+        session.save(expectedClientData);
         session.clear();
 
-        CarCategoryEntity actualCarCategory = session.get(CarCategoryEntity.class, expectedCarCategory.getId());
+        ClientDataEntity actualClientData = session.get(ClientDataEntity.class, expectedClientData.getId());
 
-        assertThat(actualCarCategory).isEqualTo(expectedCarCategory);
+        assertThat(actualClientData).isEqualTo(expectedClientData);
     }
 
     @Test
     void update() {
-        CarCategoryEntity expectedCarCategory = buildCarCategory();
-        session.save(expectedCarCategory);
-        expectedCarCategory.setCategory("E");
-        session.update(expectedCarCategory);
+        UserEntity user = EntityUtil.buildUser();
+        session.save(user);
+        ClientDataEntity expectedClientData = EntityUtil.buildClientData(user);
+        session.save(expectedClientData);
+        session.clear();
+        expectedClientData.setDriverLicenceNo("12354ad");
+        session.update(expectedClientData);
         session.flush();
         session.clear();
 
-        CarCategoryEntity actualCarCategory = session.get(CarCategoryEntity.class, expectedCarCategory.getId());
+        ClientDataEntity actualClientData = session.get(ClientDataEntity.class, expectedClientData.getId());
 
-        assertThat(actualCarCategory).isEqualTo(expectedCarCategory);
+        assertThat(actualClientData).isEqualTo(expectedClientData);
     }
 
     @Test
     void delete() {
-        CarCategoryEntity expectedCarCategory = buildCarCategory();
-        session.save(expectedCarCategory);
+        UserEntity user = EntityUtil.buildUser();
+        session.save(user);
+        ClientDataEntity expectedClientData = EntityUtil.buildClientData(user);
+        session.save(expectedClientData);
         session.clear();
-        session.delete(expectedCarCategory);
+        session.delete(expectedClientData);
         session.flush();
         session.clear();
 
-        CarCategoryEntity actualCarCategory = session.get(CarCategoryEntity.class, expectedCarCategory.getId());
+        ClientDataEntity actualClientData = session.get(ClientDataEntity.class, expectedClientData.getId());
 
-        assertThat(actualCarCategory).isNull();
+        assertThat(actualClientData).isNull();
     }
 
     @AfterEach
@@ -86,12 +92,5 @@ public class ClientDataIT {
     @AfterAll
     static void closeSessionFactory() {
         sessionFactory.close();
-    }
-
-    private static CarCategoryEntity buildCarCategory() {
-        return CarCategoryEntity.builder()
-                .category("S")
-                .dayPrice(BigDecimal.valueOf(60.12))
-                .build();
     }
 }
