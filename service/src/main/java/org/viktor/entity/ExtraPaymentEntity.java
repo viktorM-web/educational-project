@@ -3,6 +3,7 @@ package org.viktor.entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -19,6 +20,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(exclude = "order")
+@EqualsAndHashCode(exclude = "order")
 @Builder
 @Entity
 @Table(name = "extra_payment")

@@ -27,8 +27,8 @@ import static javax.persistence.CascadeType.REFRESH;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = "orders")
-@EqualsAndHashCode(of = "email")
+@ToString(exclude = {"orders", "clientData"})
+@EqualsAndHashCode(exclude = {"orders", "clientData"})
 @Builder
 @Entity
 @Table(name = "users")
@@ -43,7 +43,7 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToOne(mappedBy = "user", cascade = {ALL}, orphanRemoval = true)
+    @OneToOne(mappedBy = "user", cascade = ALL, orphanRemoval = true)
     private ClientDataEntity clientData;
 
     @Builder.Default

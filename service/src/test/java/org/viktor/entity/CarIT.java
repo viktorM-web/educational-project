@@ -1,39 +1,20 @@
 package org.viktor.entity;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.viktor.util.HibernateTestUtil;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CarIT {
-
-    private static SessionFactory sessionFactory;
-    private Session session;
-
-    @BeforeAll
-    static void initSessionFactory() {
-        sessionFactory = HibernateTestUtil.buildSessionFactory();
-    }
-
-    @BeforeEach
-    void initSession() {
-        session = sessionFactory.openSession();
-        session.beginTransaction();
-    }
+public class CarIT extends EntityTestBase {
 
     @Test
     void saveCar() {
         CarCategoryEntity carCategory = EntityUtil.buildCarCategory();
         session.save(carCategory);
+        session.flush();
         CarEntity car = EntityUtil.buildCar(carCategory);
 
         session.save(car);
+        session.flush();
 
         assertThat(car.getId()).isNotNull();
     }
@@ -42,8 +23,10 @@ public class CarIT {
     void getCar() {
         CarCategoryEntity carCategory = EntityUtil.buildCarCategory();
         session.save(carCategory);
+        session.flush();
         CarEntity expectedCar = EntityUtil.buildCar(carCategory);
         session.save(expectedCar);
+        session.flush();
         session.clear();
 
         CarEntity actualCar = session.get(CarEntity.class, expectedCar.getId());
@@ -55,9 +38,12 @@ public class CarIT {
     void update() {
         CarCategoryEntity carCategory = EntityUtil.buildCarCategory();
         session.save(carCategory);
+        session.flush();
         CarEntity expectedCar = EntityUtil.buildCar(carCategory);
         session.save(expectedCar);
+        session.flush();
         session.clear();
+
         expectedCar.setVinCode("12545454er154trerg");
         session.update(expectedCar);
         session.flush();
@@ -72,9 +58,12 @@ public class CarIT {
     void delete() {
         CarCategoryEntity carCategory = EntityUtil.buildCarCategory();
         session.save(carCategory);
+        session.flush();
         CarEntity expectedCar = EntityUtil.buildCar(carCategory);
         session.save(expectedCar);
+        session.flush();
         session.clear();
+
         session.delete(expectedCar);
         session.flush();
         session.clear();
@@ -84,14 +73,4 @@ public class CarIT {
         assertThat(actualCar).isNull();
     }
 
-    @AfterEach
-    void closeSession() {
-        session.getTransaction().rollback();
-        session.close();
-    }
-
-    @AfterAll
-    static void closeSessionFactory() {
-        sessionFactory.close();
-    }
 }

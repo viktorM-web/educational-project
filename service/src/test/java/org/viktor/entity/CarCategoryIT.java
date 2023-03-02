@@ -1,37 +1,17 @@
 package org.viktor.entity;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.viktor.util.HibernateTestUtil;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CarCategoryIT {
-
-    private static SessionFactory sessionFactory;
-    private Session session;
-
-    @BeforeAll
-    static void initSessionFactory() {
-        sessionFactory = HibernateTestUtil.buildSessionFactory();
-    }
-
-    @BeforeEach
-    void initSession() {
-        session = sessionFactory.openSession();
-        session.beginTransaction();
-    }
+public class CarCategoryIT extends EntityTestBase {
 
     @Test
     void saveCarCategory() {
         CarCategoryEntity carCategory = EntityUtil.buildCarCategory();
 
         session.save(carCategory);
+        session.flush();
 
         assertThat(carCategory.getId()).isNotNull();
     }
@@ -40,6 +20,7 @@ public class CarCategoryIT {
     void getCarCategory() {
         CarCategoryEntity expectedCarCategory = EntityUtil.buildCarCategory();
         session.save(expectedCarCategory);
+        session.flush();
         session.clear();
 
         CarCategoryEntity actualCarCategory = session.get(CarCategoryEntity.class, expectedCarCategory.getId());
@@ -51,6 +32,7 @@ public class CarCategoryIT {
     void update() {
         CarCategoryEntity expectedCarCategory = EntityUtil.buildCarCategory();
         session.save(expectedCarCategory);
+        session.flush();
         expectedCarCategory.setCategory("E");
         session.update(expectedCarCategory);
         session.flush();
@@ -65,7 +47,9 @@ public class CarCategoryIT {
     void delete() {
         CarCategoryEntity expectedCarCategory = EntityUtil.buildCarCategory();
         session.save(expectedCarCategory);
+        session.flush();
         session.clear();
+
         session.delete(expectedCarCategory);
         session.flush();
         session.clear();
@@ -73,16 +57,5 @@ public class CarCategoryIT {
         CarCategoryEntity actualCarCategory = session.get(CarCategoryEntity.class, expectedCarCategory.getId());
 
         assertThat(actualCarCategory).isNull();
-    }
-
-    @AfterEach
-    void closeSession() {
-        session.getTransaction().rollback();
-        session.close();
-    }
-
-    @AfterAll
-    static void closeSessionFactory() {
-        sessionFactory.close();
     }
 }

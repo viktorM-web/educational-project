@@ -25,7 +25,7 @@ import static javax.persistence.CascadeType.REFRESH;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(exclude = "cars")
-@EqualsAndHashCode(of = "category")
+@EqualsAndHashCode(exclude = "cars")
 @Builder
 @Entity
 @Table(name = "car_category")

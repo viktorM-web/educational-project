@@ -25,7 +25,7 @@ import static javax.persistence.CascadeType.ALL;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(exclude = {"user", "car", "extraPayment"})
-@EqualsAndHashCode(exclude ="extraPayment")
+@EqualsAndHashCode(exclude = {"user", "car", "extraPayment"})
 @Builder
 @Entity
 @Table(name = "orders")
@@ -46,7 +46,7 @@ public class OrderEntity {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @OneToOne(mappedBy = "order", cascade = {ALL}, orphanRemoval = true)
+    @OneToOne(mappedBy = "order", cascade = ALL, orphanRemoval = true)
     private ExtraPaymentEntity extraPayment;
 
 }

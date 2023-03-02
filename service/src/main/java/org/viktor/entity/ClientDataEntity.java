@@ -19,7 +19,7 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "driverLicenceNo")
+@EqualsAndHashCode(exclude = "user")
 @ToString(exclude = "user")
 @Builder
 @Entity
