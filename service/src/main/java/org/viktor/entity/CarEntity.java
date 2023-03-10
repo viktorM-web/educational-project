@@ -13,6 +13,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.HashSet;
@@ -22,6 +24,13 @@ import static javax.persistence.CascadeType.MERGE;
 import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.CascadeType.REFRESH;
 
+@NamedEntityGraph(
+        name = "WithCarCategory",
+        attributeNodes = {
+                @NamedAttributeNode("carCategory"),
+                @NamedAttributeNode("orders")
+        }
+)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
