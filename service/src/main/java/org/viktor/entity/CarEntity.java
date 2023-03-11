@@ -17,8 +17,8 @@ import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import static javax.persistence.CascadeType.MERGE;
 import static javax.persistence.CascadeType.PERSIST;
@@ -56,7 +56,7 @@ public class CarEntity {
     private CarCategoryEntity carCategory;
 
     @OneToMany(mappedBy = "car", cascade = {PERSIST, MERGE, REFRESH}, orphanRemoval = true)
-    private Set<OrderEntity> orders = new HashSet<>();
+    private List<OrderEntity> orders = new ArrayList<>();
 
     public void addCar(OrderEntity order) {
         orders.add(order);

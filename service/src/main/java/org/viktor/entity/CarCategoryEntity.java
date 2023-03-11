@@ -14,8 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import static javax.persistence.CascadeType.MERGE;
 import static javax.persistence.CascadeType.PERSIST;
@@ -38,7 +38,7 @@ public class CarCategoryEntity {
     private BigDecimal dayPrice;
 
     @OneToMany(mappedBy = "carCategory", cascade = {PERSIST, MERGE, REFRESH}, orphanRemoval = true)
-    private Set<CarEntity> cars = new HashSet<>();
+    private List<CarEntity> cars = new ArrayList<>();
 
     public void addCar(CarEntity car) {
         cars.add(car);

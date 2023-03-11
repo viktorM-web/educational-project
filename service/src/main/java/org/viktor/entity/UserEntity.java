@@ -14,12 +14,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
-import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.CascadeType.MERGE;
 import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.CascadeType.REFRESH;
@@ -43,12 +41,9 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToOne(mappedBy = "user", cascade = ALL, orphanRemoval = true)
-    private ClientDataEntity clientData;
-
     @Builder.Default
     @OneToMany(mappedBy = "user", cascade = {PERSIST, MERGE, REFRESH}, orphanRemoval = true)
-    private Set<OrderEntity> orders = new HashSet<>();
+    private List<OrderEntity> orders = new ArrayList<>();
 
     public void addUser(OrderEntity order) {
         orders.add(order);
