@@ -58,6 +58,7 @@ public class CarEntity {
     @OneToMany(mappedBy = "car", cascade = {PERSIST, MERGE, REFRESH}, orphanRemoval = true)
     private List<OrderEntity> orders = new ArrayList<>();
 
+
     public void addCar(OrderEntity order) {
         orders.add(order);
         order.setCar(this);

@@ -40,7 +40,7 @@ public class UserEntity {
 
     @Enumerated(EnumType.STRING)
     private Role role;
-
+    
     @Builder.Default
     @OneToMany(mappedBy = "user", cascade = {PERSIST, MERGE, REFRESH}, orphanRemoval = true)
     private List<OrderEntity> orders = new ArrayList<>();
@@ -50,4 +50,3 @@ public class UserEntity {
         order.setUser(this);
     }
 }
-
