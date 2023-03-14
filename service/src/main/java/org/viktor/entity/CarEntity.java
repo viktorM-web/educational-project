@@ -13,15 +13,24 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import static javax.persistence.CascadeType.MERGE;
 import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.CascadeType.REFRESH;
 
+@NamedEntityGraph(
+        name = "WithCarCategory",
+        attributeNodes = {
+                @NamedAttributeNode("carCategory"),
+                @NamedAttributeNode("orders")
+        }
+)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -47,7 +56,8 @@ public class CarEntity {
     private CarCategoryEntity carCategory;
 
     @OneToMany(mappedBy = "car", cascade = {PERSIST, MERGE, REFRESH}, orphanRemoval = true)
-    private Set<OrderEntity> orders = new HashSet<>();
+    private List<OrderEntity> orders = new ArrayList<>();
+
 
     public void addCar(OrderEntity order) {
         orders.add(order);

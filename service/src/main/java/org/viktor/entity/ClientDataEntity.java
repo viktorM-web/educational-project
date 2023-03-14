@@ -12,6 +12,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.time.LocalDate;
@@ -31,6 +32,8 @@ public class ClientDataEntity {
     private Integer id;
 
     @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+
     private UserEntity user;
     private String firstname;
     private String lastname;
@@ -41,6 +44,5 @@ public class ClientDataEntity {
 
     public void setUser(UserEntity user) {
         this.user = user;
-        user.setClientData(this);
     }
 }

@@ -15,11 +15,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
-
-import static javax.persistence.CascadeType.ALL;
 
 @Data
 @NoArgsConstructor
@@ -45,8 +42,4 @@ public class OrderEntity {
 
     @Enumerated(EnumType.STRING)
     private Status status;
-
-    @OneToOne(mappedBy = "order", cascade = ALL, orphanRemoval = true)
-    private ExtraPaymentEntity extraPayment;
-
 }
