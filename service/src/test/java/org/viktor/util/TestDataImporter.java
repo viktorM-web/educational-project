@@ -38,8 +38,13 @@ public class TestDataImporter {
         session.getTransaction().commit();
     }
 
-    private static CarEntity saveCar(Session session, CarCategoryEntity carCategory, String brand,
-                                     String model, Integer yearIssue, String colour, Integer seatsQuantity) {
+    private static CarEntity saveCar(Session session,
+                                     CarCategoryEntity carCategory,
+                                     String brand,
+                                     String model,
+                                     Integer yearIssue,
+                                     String colour,
+                                     Integer seatsQuantity) {
         CarEntity car = CarEntity.builder()
                 .brand(brand)
                 .model(model)

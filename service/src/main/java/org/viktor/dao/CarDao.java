@@ -18,19 +18,17 @@ import static org.viktor.entity.QCarEntity.carEntity;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CarDao {
-
     private static final CarDao INSTANCE = new CarDao();
 
     public List<CarEntity> findAllByFilterQuerydsl(Session session, CarFilterDto filter) {
-
         Predicate predicate = QPredicate.builder()
                 .add(filter.getCategory(), carCategoryEntity.category::eq)
-                .add(filter.getDayPrice(), carCategoryEntity.dayPrice::loe)
+                .add(filter.getMaxDayPrice(), carCategoryEntity.dayPrice::loe)
                 .add(filter.getBrand(), carEntity.brand::eq)
                 .add(filter.getModel(), carEntity.model::eq)
-                .add(filter.getYearIssue(), carEntity.yearIssue::goe)
+                .add(filter.getOlderYearIssue(), carEntity.yearIssue::goe)
                 .add(filter.getColour(), carEntity.colour::eq)
-                .add(filter.getSeatsQuantity(), carEntity.seatsQuantity::goe)
+                .add(filter.getMinSeatsQuantity(), carEntity.seatsQuantity::goe)
                 .buildAnd();
 
         return new JPAQuery<CarEntity>(session)
@@ -38,12 +36,11 @@ public class CarDao {
                 .from(carEntity)
                 .join(carEntity.carCategory, carCategoryEntity)
                 .where(predicate)
-                .setHint(GraphSemantic.LOAD.getJpaHintName(), session.getEntityGraph("WithCarCategory"))
+                .setHint(GraphSemantic.FETCH.getJpaHintName(), session.getEntityGraph("WithCarCategory"))
                 .fetch();
     }
 
     public List<CarEntity> findAllByFilterCriteriaApi(Session session, CarFilterDto filter) {
-
         var cb = session.getCriteriaBuilder();
 
         var criteria = cb.createQuery(CarEntity.class);
@@ -51,21 +48,21 @@ public class CarDao {
         var car = criteria.from(CarEntity.class);
         var carCategory = car.join(CarEntity_.carCategory);
 
-        javax.persistence.criteria.Predicate[] predicates = Predicate_.builder()
+        javax.persistence.criteria.Predicate[] predicates = CriteriaPredicate.builder()
                 .add(filter.getCategory(), it -> cb.equal(carCategory.get(CarCategoryEntity_.category), it))
-                .add(filter.getDayPrice(), it -> cb.le(carCategory.get(CarCategoryEntity_.dayPrice), it))
+                .add(filter.getMaxDayPrice(), it -> cb.le(carCategory.get(CarCategoryEntity_.dayPrice), it))
                 .add(filter.getBrand(), it -> cb.equal(car.get(CarEntity_.brand), it))
                 .add(filter.getModel(), it -> cb.equal(car.get(CarEntity_.model), it))
-                .add(filter.getYearIssue(), it -> cb.ge(car.get(CarEntity_.yearIssue), it))
+                .add(filter.getOlderYearIssue(), it -> cb.ge(car.get(CarEntity_.yearIssue), it))
                 .add(filter.getColour(), it -> cb.equal(car.get(CarEntity_.colour), it))
-                .add(filter.getSeatsQuantity(), it -> cb.ge(car.get(CarEntity_.seatsQuantity), it))
+                .add(filter.getMinSeatsQuantity(), it -> cb.ge(car.get(CarEntity_.seatsQuantity), it))
                 .build();
 
         criteria.select(car)
                 .where(predicates);
 
         return session.createQuery(criteria)
-                .setHint(GraphSemantic.LOAD.getJpaHintName(), session.getEntityGraph("WithCarCategory"))
+                .setHint(GraphSemantic.FETCH.getJpaHintName(), session.getEntityGraph("WithCarCategory"))
                 .list();
     }
 

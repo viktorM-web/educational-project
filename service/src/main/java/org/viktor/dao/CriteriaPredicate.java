@@ -9,14 +9,14 @@ import java.util.List;
 import java.util.function.Function;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class Predicate_ {
+public class CriteriaPredicate {
     private final List<Predicate> predicates = new ArrayList<>();
 
-    public static Predicate_ builder() {
-        return new Predicate_();
+    public static CriteriaPredicate builder() {
+        return new CriteriaPredicate();
     }
 
-    public <T> Predicate_ add(T object, Function<T, Predicate> function) {
+    public <T> CriteriaPredicate add(T object, Function<T, Predicate> function) {
         if (object != null) {
             predicates.add(function.apply(object));
         }

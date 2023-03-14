@@ -11,10 +11,10 @@ public class CarFilterDto {
 
     String brand;
     String model;
-    Integer yearIssue;
+    Integer olderYearIssue;
     String colour;
-    Integer seatsQuantity;
+    Integer minSeatsQuantity;
     String category;
-    BigDecimal dayPrice;
+    BigDecimal maxDayPrice;
 
 }
