@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @UtilityClass
-class EntityUtil {
+public class EntityUtil {
 
     public static CarCategoryEntity buildCarCategory() {
         return CarCategoryEntity.builder()
