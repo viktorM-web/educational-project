@@ -8,9 +8,9 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CarCategoryRepositoryTest extends RepositoryTestBase {
+class CarCategoryRepositoryTest extends RepositoryTestBase {
 
-    private static final CarCategoryRepository carCategoryRepository = new CarCategoryRepository(session);
+    private final CarCategoryRepository carCategoryRepository = new CarCategoryRepository(session);
 
     @Test
     void save() {

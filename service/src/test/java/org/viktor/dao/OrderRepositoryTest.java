@@ -12,12 +12,12 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class OrderRepositoryTest extends RepositoryTestBase {
+class OrderRepositoryTest extends RepositoryTestBase {
 
-    private static final CarRepository carRepository = new CarRepository(session);
-    private static final CarCategoryRepository carCategoryRepository = new CarCategoryRepository(session);
-    private static final UserRepository userRepository = new UserRepository(session);
-    private static final OrderRepository orderRepository = new OrderRepository(session);
+    private final CarRepository carRepository = new CarRepository(session);
+    private final CarCategoryRepository carCategoryRepository = new CarCategoryRepository(session);
+    private final UserRepository userRepository = new UserRepository(session);
+    private final OrderRepository orderRepository = new OrderRepository(session);
 
     @Test
     void save() {

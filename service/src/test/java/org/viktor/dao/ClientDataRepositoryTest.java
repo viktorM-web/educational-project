@@ -9,10 +9,10 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ClientDataRepositoryTest extends RepositoryTestBase {
+class ClientDataRepositoryTest extends RepositoryTestBase {
 
-    private static final ClientDataRepository clientDataRepository = new ClientDataRepository(session);
-    private static final UserRepository userRepository = new UserRepository(session);
+    private final ClientDataRepository clientDataRepository = new ClientDataRepository(session);
+    private final UserRepository userRepository = new UserRepository(session);
 
     @Test
     void save() {

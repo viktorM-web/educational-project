@@ -8,7 +8,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class UserRepositoryTest extends RepositoryTestBase {
+class UserRepositoryTest extends RepositoryTestBase {
 
     private final UserRepository userRepository = new UserRepository(session);
 

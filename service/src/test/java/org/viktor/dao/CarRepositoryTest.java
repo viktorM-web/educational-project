@@ -16,10 +16,10 @@ import java.util.stream.Stream;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CarRepositoryTest extends RepositoryTestBase {
+class CarRepositoryTest extends RepositoryTestBase {
 
-    private static final CarRepository carRepository = new CarRepository(session);
-    private static final CarCategoryRepository carCategoryRepository = new CarCategoryRepository(session);
+    private final CarRepository carRepository = new CarRepository(session);
+    private final CarCategoryRepository carCategoryRepository = new CarCategoryRepository(session);
 
     @Test
     void save() {

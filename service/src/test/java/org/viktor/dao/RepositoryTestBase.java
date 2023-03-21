@@ -11,7 +11,7 @@ import org.viktor.util.TestDataImporter;
 
 import java.lang.reflect.Proxy;
 
-public abstract class RepositoryTestBase {
+abstract class RepositoryTestBase {
     private static SessionFactory sessionFactory;
     protected static Session session;
 
