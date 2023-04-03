@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class CarCategoryRepositoryTest extends RepositoryTestBase {
 
-    private final CarCategoryRepository carCategoryRepository = new CarCategoryRepository(session);
+    private final CarCategoryRepository carCategoryRepository = context.getBean(CarCategoryRepository.class);
 
     @Test
     void save() {
@@ -25,7 +25,7 @@ class CarCategoryRepositoryTest extends RepositoryTestBase {
         CarCategoryEntity expectedCarCategory = carCategoryRepository.findById(1).get();
 
         carCategoryRepository.delete(expectedCarCategory);
-        session.clear();
+        entityManager.clear();
 
         assertThat(carCategoryRepository.findById(expectedCarCategory.getId())).isEmpty();
     }
@@ -36,7 +36,7 @@ class CarCategoryRepositoryTest extends RepositoryTestBase {
 
         expectedCarCategory.setCategory("economy+");
         carCategoryRepository.update(expectedCarCategory);
-        session.clear();
+        entityManager.clear();
 
         assertThat(carCategoryRepository.findById(expectedCarCategory.getId()).get()).isEqualTo(expectedCarCategory);
     }
@@ -44,7 +44,7 @@ class CarCategoryRepositoryTest extends RepositoryTestBase {
     @Test
     void findById() {
         CarCategoryEntity expectedCarCategory = carCategoryRepository.findById(1).get();
-        session.clear();
+        entityManager.clear();
 
         assertThat(expectedCarCategory.getCategory()).isEqualTo("economy");
     }
@@ -52,7 +52,7 @@ class CarCategoryRepositoryTest extends RepositoryTestBase {
     @Test
     void findAll() {
         List<CarCategoryEntity> expectedCarCategory = carCategoryRepository.findAll();
-        session.clear();
+        entityManager.clear();
 
         assertThat(expectedCarCategory).hasSize(3);
     }

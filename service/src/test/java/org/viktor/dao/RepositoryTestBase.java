@@ -1,42 +1,43 @@
 package org.viktor.dao;
 
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.viktor.util.HibernateTestUtil;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.viktor.config.ApplicationConfiguration;
 import org.viktor.util.TestDataImporter;
 
-import java.lang.reflect.Proxy;
+import javax.persistence.EntityManager;
 
 abstract class RepositoryTestBase {
+
     private static SessionFactory sessionFactory;
-    protected static Session session;
+    protected static EntityManager entityManager;
+    protected static AnnotationConfigApplicationContext context;
 
     @BeforeAll
     static void init() {
-        sessionFactory = HibernateTestUtil.buildSessionFactory();
+        context = new AnnotationConfigApplicationContext(ApplicationConfiguration.class);
+        sessionFactory = context.getBean(SessionFactory.class);
         TestDataImporter.importData(sessionFactory);
-        session = (Session) Proxy.newProxyInstance(SessionFactory.class.getClassLoader(), new Class[]{Session.class},
-                (proxy, method, args) -> method.invoke(sessionFactory.getCurrentSession(), args));
-
+        entityManager = context.getBean(EntityManager.class);
     }
 
     @BeforeEach
     void beginTransaction() {
-        session.beginTransaction();
+        entityManager.getTransaction().begin();
     }
 
     @AfterEach
     void closeTransaction() {
-        session.getTransaction().rollback();
+
+        entityManager.getTransaction().rollback();
     }
 
     @AfterAll
     static void closeSessionFactory() {
         sessionFactory.close();
     }
-
 }

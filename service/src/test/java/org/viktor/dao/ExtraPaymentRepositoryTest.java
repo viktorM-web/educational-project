@@ -14,11 +14,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class ExtraPaymentRepositoryTest extends RepositoryTestBase {
 
-    private final CarRepository carRepository = new CarRepository(session);
-    private final CarCategoryRepository carCategoryRepository = new CarCategoryRepository(session);
-    private final UserRepository userRepository = new UserRepository(session);
-    private final OrderRepository orderRepository = new OrderRepository(session);
-    private final ExtraPaymentRepository extraPaymentRepository = new ExtraPaymentRepository(session);
+    private final CarRepository carRepository = context.getBean(CarRepository.class);
+    private final CarCategoryRepository carCategoryRepository = context.getBean(CarCategoryRepository.class);
+    private final UserRepository userRepository = context.getBean(UserRepository.class);
+    private final OrderRepository orderRepository = context.getBean(OrderRepository.class);
+    private final ExtraPaymentRepository extraPaymentRepository = context.getBean(ExtraPaymentRepository.class);
 
     @Test
     void save() {
@@ -42,7 +42,7 @@ class ExtraPaymentRepositoryTest extends RepositoryTestBase {
         ExtraPaymentEntity expectedExtraPayment = extraPaymentRepository.findById(1).get();
 
         extraPaymentRepository.delete(expectedExtraPayment);
-        session.clear();
+        entityManager.clear();
 
         assertThat(extraPaymentRepository.findById(expectedExtraPayment.getId())).isEmpty();
     }
@@ -53,7 +53,7 @@ class ExtraPaymentRepositoryTest extends RepositoryTestBase {
 
         expectedExtraPayment.setDescription("speeding fine 2023.1.4 14:00 99.99$");
         extraPaymentRepository.update(expectedExtraPayment);
-        session.clear();
+        entityManager.clear();
 
         assertThat(extraPaymentRepository.findById(expectedExtraPayment.getId()).get()).isEqualTo(expectedExtraPayment);
     }
@@ -61,7 +61,7 @@ class ExtraPaymentRepositoryTest extends RepositoryTestBase {
     @Test
     void findById() {
         ExtraPaymentEntity expectedExtraPayment = extraPaymentRepository.findById(1).get();
-        session.clear();
+        entityManager.clear();
 
         assertThat(expectedExtraPayment.getDescription()).isEqualTo("speeding fine 2023.1.4 14:00 50.00$");
     }
@@ -69,7 +69,7 @@ class ExtraPaymentRepositoryTest extends RepositoryTestBase {
     @Test
     void findAll() {
         List<ExtraPaymentEntity> expectedExtraPayment = extraPaymentRepository.findAll();
-        session.clear();
+        entityManager.clear();
 
         assertThat(expectedExtraPayment).hasSize(1);
     }

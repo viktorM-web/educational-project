@@ -3,6 +3,7 @@ package org.viktor.dao;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQuery;
 import org.hibernate.graph.GraphSemantic;
+import org.springframework.stereotype.Repository;
 import org.viktor.dto.CarFilterDto;
 import org.viktor.entity.CarEntity;
 
@@ -12,6 +13,7 @@ import java.util.List;
 import static org.viktor.entity.QCarCategoryEntity.carCategoryEntity;
 import static org.viktor.entity.QCarEntity.carEntity;
 
+@Repository
 public class CarRepository extends RepositoryBase<Integer, CarEntity> {
 
     public CarRepository(EntityManager entityManager) {

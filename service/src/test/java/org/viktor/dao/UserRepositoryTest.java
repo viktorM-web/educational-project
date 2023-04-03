@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class UserRepositoryTest extends RepositoryTestBase {
 
-    private final UserRepository userRepository = new UserRepository(session);
+    private final UserRepository userRepository = context.getBean(UserRepository.class);
 
     @Test
     void save() {
@@ -26,7 +26,7 @@ class UserRepositoryTest extends RepositoryTestBase {
         UserEntity expectedUser = userRepository.findById(2).get();
 
         userRepository.delete(expectedUser);
-        session.clear();
+        entityManager.clear();
 
         assertThat(userRepository.findById(expectedUser.getId())).isEmpty();
     }
@@ -37,7 +37,7 @@ class UserRepositoryTest extends RepositoryTestBase {
 
         expectedUser.setEmail("ivan@gmail.com");
         userRepository.update(expectedUser);
-        session.clear();
+        entityManager.clear();
 
         assertThat(userRepository.findById(expectedUser.getId()).get()).isEqualTo(expectedUser);
     }
@@ -45,7 +45,7 @@ class UserRepositoryTest extends RepositoryTestBase {
     @Test
     void findById() {
         UserEntity expectedUser = userRepository.findById(1).get();
-        session.clear();
+        entityManager.clear();
 
         assertThat(expectedUser.getEmail()).isEqualTo("ivan@mail.ru");
     }
@@ -53,7 +53,7 @@ class UserRepositoryTest extends RepositoryTestBase {
     @Test
     void findAll() {
         List<UserEntity> expectedUser = userRepository.findAll();
-        session.clear();
+        entityManager.clear();
 
         assertThat(expectedUser).hasSize(2);
     }

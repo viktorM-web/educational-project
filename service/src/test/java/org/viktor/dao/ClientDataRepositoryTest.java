@@ -11,8 +11,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class ClientDataRepositoryTest extends RepositoryTestBase {
 
-    private final ClientDataRepository clientDataRepository = new ClientDataRepository(session);
-    private final UserRepository userRepository = new UserRepository(session);
+    private final ClientDataRepository clientDataRepository = context.getBean(ClientDataRepository.class);
+    private final UserRepository userRepository = context.getBean(UserRepository.class);
 
     @Test
     void save() {
@@ -29,7 +29,7 @@ class ClientDataRepositoryTest extends RepositoryTestBase {
         ClientDataEntity expectedClientData = clientDataRepository.findById(1).get();
 
         clientDataRepository.delete(expectedClientData);
-        session.clear();
+        entityManager.clear();
 
         assertThat(clientDataRepository.findById(expectedClientData.getId())).isEmpty();
     }
@@ -40,7 +40,7 @@ class ClientDataRepositoryTest extends RepositoryTestBase {
 
         expectedClientData.setDriverLicenceNo("12354aa");
         clientDataRepository.update(expectedClientData);
-        session.clear();
+        entityManager.clear();
 
         assertThat(clientDataRepository.findById(expectedClientData.getId()).get()).isEqualTo(expectedClientData);
     }
@@ -48,7 +48,7 @@ class ClientDataRepositoryTest extends RepositoryTestBase {
     @Test
     void findById() {
         ClientDataEntity expectedClientData = clientDataRepository.findById(1).get();
-        session.clear();
+        entityManager.clear();
 
         assertThat(expectedClientData.getDriverLicenceNo()).isEqualTo("123456AB");
     }
@@ -56,7 +56,7 @@ class ClientDataRepositoryTest extends RepositoryTestBase {
     @Test
     void findAll() {
         List<ClientDataEntity> expectedClientData = clientDataRepository.findAll();
-        session.clear();
+        entityManager.clear();
 
         assertThat(expectedClientData).hasSize(1);
     }

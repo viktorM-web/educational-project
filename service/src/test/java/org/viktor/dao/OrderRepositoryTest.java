@@ -14,10 +14,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class OrderRepositoryTest extends RepositoryTestBase {
 
-    private final CarRepository carRepository = new CarRepository(session);
-    private final CarCategoryRepository carCategoryRepository = new CarCategoryRepository(session);
-    private final UserRepository userRepository = new UserRepository(session);
-    private final OrderRepository orderRepository = new OrderRepository(session);
+    private final CarRepository carRepository = context.getBean(CarRepository.class);
+    private final CarCategoryRepository carCategoryRepository = context.getBean(CarCategoryRepository.class);
+    private final UserRepository userRepository = context.getBean(UserRepository.class);
+    private final OrderRepository orderRepository = context.getBean(OrderRepository.class);
 
     @Test
     void save() {
@@ -38,7 +38,7 @@ class OrderRepositoryTest extends RepositoryTestBase {
         OrderEntity expectedOrder = orderRepository.findById(1).get();
 
         orderRepository.delete(expectedOrder);
-        session.clear();
+        entityManager.clear();
 
         assertThat(orderRepository.findById(expectedOrder.getId())).isEmpty();
     }
@@ -49,7 +49,7 @@ class OrderRepositoryTest extends RepositoryTestBase {
 
         expectedOrder.setStatus(Status.CANCELED);
         orderRepository.update(expectedOrder);
-        session.clear();
+        entityManager.clear();
 
         assertThat(orderRepository.findById(expectedOrder.getId()).get()).isEqualTo(expectedOrder);
     }
@@ -57,7 +57,7 @@ class OrderRepositoryTest extends RepositoryTestBase {
     @Test
     void findById() {
         OrderEntity expectedOrder = orderRepository.findById(1).get();
-        session.clear();
+        entityManager.clear();
 
         assertThat(expectedOrder.getStatus()).isEqualTo(Status.ACCEPTED);
     }
@@ -65,7 +65,7 @@ class OrderRepositoryTest extends RepositoryTestBase {
     @Test
     void findAll() {
         List<OrderEntity> expectedOrder = orderRepository.findAll();
-        session.clear();
+        entityManager.clear();
 
         assertThat(expectedOrder).hasSize(2);
     }

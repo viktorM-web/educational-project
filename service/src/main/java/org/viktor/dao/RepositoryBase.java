@@ -1,6 +1,5 @@
 package org.viktor.dao;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.EntityManager;
