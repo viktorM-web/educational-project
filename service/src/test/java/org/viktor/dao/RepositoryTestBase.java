@@ -38,6 +38,6 @@ abstract class RepositoryTestBase {
 
     @AfterAll
     static void closeSessionFactory() {
-        sessionFactory.close();
+        context.close();
     }
 }

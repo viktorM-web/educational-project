@@ -6,6 +6,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.viktor.util.HibernateUtil;
 
+import javax.annotation.PreDestroy;
 import javax.persistence.EntityManager;
 import java.lang.reflect.Proxy;
 
@@ -22,5 +23,10 @@ public class ApplicationConfiguration {
     EntityManager entityManager(){
         return (EntityManager) Proxy.newProxyInstance(SessionFactory.class.getClassLoader(), new Class[]{EntityManager.class},
                 (proxy, method, args) -> method.invoke(sessionFactory().getCurrentSession(), args));
+    }
+
+    @PreDestroy
+    public void destroy(){
+        sessionFactory().close();
     }
 }
