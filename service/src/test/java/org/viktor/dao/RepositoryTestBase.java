@@ -32,7 +32,6 @@ abstract class RepositoryTestBase {
 
     @AfterEach
     void closeTransaction() {
-
         entityManager.getTransaction().rollback();
     }
 

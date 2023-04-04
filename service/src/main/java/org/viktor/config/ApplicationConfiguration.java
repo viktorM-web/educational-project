@@ -15,18 +15,18 @@ import java.lang.reflect.Proxy;
 public class ApplicationConfiguration {
 
     @Bean
-    SessionFactory sessionFactory(){
+    SessionFactory sessionFactory() {
         return HibernateUtil.buildSessionFactory();
     }
 
     @Bean
-    EntityManager entityManager(){
+    EntityManager entityManager() {
         return (EntityManager) Proxy.newProxyInstance(SessionFactory.class.getClassLoader(), new Class[]{EntityManager.class},
                 (proxy, method, args) -> method.invoke(sessionFactory().getCurrentSession(), args));
     }
 
     @PreDestroy
-    public void destroy(){
+    void destroy() {
         sessionFactory().close();
     }
 }
