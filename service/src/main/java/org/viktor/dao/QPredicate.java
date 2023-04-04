@@ -11,6 +11,7 @@ import java.util.function.Function;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class QPredicate {
+
     private final List<Predicate> predicates = new ArrayList<>();
 
     public static QPredicate builder() {

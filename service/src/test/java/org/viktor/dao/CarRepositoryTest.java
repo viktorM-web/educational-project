@@ -1,17 +1,13 @@
 package org.viktor.dao;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.viktor.dto.CarFilterDto;
+import org.viktor.entity.CarCategoryEntity;
 import org.viktor.entity.CarEntity;
-import org.viktor.util.HibernateTestUtil;
-import org.viktor.util.TestDataImporter;
+import org.viktor.entity.EntityUtil;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -19,54 +15,68 @@ import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
-@TestInstance(PER_CLASS)
-public class CarDaoTest {
+class CarRepositoryTest extends RepositoryTestBase {
 
-    private final SessionFactory sessionFactory = HibernateTestUtil.buildSessionFactory();
-    private final CarDao carDao = CarDao.getInstance();
+    private final CarRepository carRepository = context.getBean(CarRepository.class);
+    private final CarCategoryRepository carCategoryRepository = context.getBean(CarCategoryRepository.class);
 
-    @BeforeAll
-    public void initDb() {
-        TestDataImporter.importData(sessionFactory);
+    @Test
+    void save() {
+        CarCategoryEntity carCategory = EntityUtil.buildCarCategory();
+        carCategoryRepository.save(carCategory);
+        CarEntity car = EntityUtil.buildCar(carCategory);
+
+        carRepository.save(car);
+
+        assertThat(car.getId()).isNotNull();
     }
 
-    @AfterAll
-    public void finish() {
-        sessionFactory.close();
+    @Test
+    void delete() {
+        CarEntity expectedCar = carRepository.findById(1).get();
+
+        carRepository.delete(expectedCar);
+        entityManager.clear();
+
+        assertThat(carRepository.findById(expectedCar.getId())).isEmpty();
     }
 
-    @ParameterizedTest
-    @MethodSource("carFilterDataProvider")
-    void findAllByFilterCriteriaApi(CarFilterDto filter, List<Integer> expectedResult) {
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
+    @Test
+    void update() {
+        CarEntity expectedCar = carRepository.findById(1).get();
 
-            List<CarEntity> actualResult = carDao.findAllByFilterCriteriaApi(session, filter);
-            List<Integer> actualId = actualResult.stream().map(CarEntity::getId).collect(toList());
+        expectedCar.setVinCode("12545454er154trerg");
+        carRepository.update(expectedCar);
+        entityManager.clear();
 
-            assertThat(actualResult).hasSize(expectedResult.size());
-            assertThat(actualId).containsAll(expectedResult);
+        assertThat(carRepository.findById(expectedCar.getId()).get()).isEqualTo(expectedCar);
+    }
 
-            session.getTransaction().rollback();
-        }
+    @Test
+    void findById() {
+        CarEntity expectedCar = carRepository.findById(1).get();
+        entityManager.clear();
+
+        assertThat(expectedCar.getVinCode()).isEqualTo("11111AA");
+    }
+
+    @Test
+    void findAll() {
+        List<CarEntity> expectedCar = carRepository.findAll();
+        entityManager.clear();
+
+        assertThat(expectedCar).hasSize(9);
     }
 
     @ParameterizedTest
     @MethodSource("carFilterDataProvider")
     void findAllByFilterQuerydsl(CarFilterDto filter, List<Integer> expectedResult) {
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
+        List<CarEntity> actualResult = carRepository.findAllByFilterQuerydsl(filter);
+        List<Integer> actualId = actualResult.stream().map(CarEntity::getId).collect(toList());
 
-            List<CarEntity> actualResult = carDao.findAllByFilterQuerydsl(session, filter);
-            List<Integer> actualId = actualResult.stream().map(CarEntity::getId).collect(toList());
-
-            assertThat(actualResult).hasSize(expectedResult.size());
-            assertThat(actualId).containsAll(expectedResult);
-
-            session.getTransaction().rollback();
-        }
+        assertThat(actualResult).hasSize(expectedResult.size());
+        assertThat(actualId).containsAll(expectedResult);
     }
 
     public static Stream<Arguments> carFilterDataProvider() {
