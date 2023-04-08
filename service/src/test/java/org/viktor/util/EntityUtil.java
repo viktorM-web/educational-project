@@ -1,6 +1,14 @@
-package org.viktor.entity;
+package org.viktor.util;
 
 import lombok.experimental.UtilityClass;
+import org.viktor.entity.CarCategoryEntity;
+import org.viktor.entity.CarEntity;
+import org.viktor.entity.ClientDataEntity;
+import org.viktor.entity.ExtraPaymentEntity;
+import org.viktor.entity.OrderEntity;
+import org.viktor.entity.Role;
+import org.viktor.entity.Status;
+import org.viktor.entity.UserEntity;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -11,14 +19,14 @@ public class EntityUtil {
 
     public static CarCategoryEntity buildCarCategory() {
         return CarCategoryEntity.builder()
-                .category("S")
+                .category("test")
                 .dayPrice(BigDecimal.valueOf(60.12))
                 .build();
     }
 
     public static UserEntity buildUser() {
         return UserEntity.builder()
-                .email("ivan@mail.ru")
+                .email("TEST@mail.ru")
                 .password("123")
                 .role(Role.CLIENT)
                 .build();
@@ -26,6 +34,7 @@ public class EntityUtil {
 
     public static CarEntity buildCar(CarCategoryEntity carCategory) {
         return CarEntity.builder()
+                .vinCode("7777XXXX")
                 .brand("BMW")
                 .model("530i")
                 .yearIssue(2022)
@@ -42,7 +51,7 @@ public class EntityUtil {
                 .firstname("Ivan")
                 .lastname("Ivanov")
                 .birthday(LocalDate.of(2000, 1, 2))
-                .driverLicenceNo("AB1235456")
+                .driverLicenceNo("7777777777")
                 .dateExpiry(LocalDate.of(2024, 1, 8))
                 .driverExperience(4)
                 .build();
@@ -61,7 +70,7 @@ public class EntityUtil {
     public static ExtraPaymentEntity buildPayment(OrderEntity order) {
         return ExtraPaymentEntity.builder()
                 .order(order)
-                .description("speeding fine 2023.3.2 14:00 50.00$")
+                .description("test")
                 .price(BigDecimal.valueOf(50.0).setScale(2))
                 .build();
     }
