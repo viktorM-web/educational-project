@@ -1,19 +1,17 @@
 package org.viktor.spring.integration.database.repository;
 
 import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.viktor.dao.CarCategoryRepository;
-import org.viktor.dao.CarRepository;
+import org.viktor.repository.CarCategoryRepository;
+import org.viktor.repository.CarRepository;
 import org.viktor.dto.CarFilterDto;
 import org.viktor.entity.CarCategoryEntity;
 import org.viktor.entity.CarEntity;
+import org.viktor.spring.integration.IntegrationTestBase;
 import org.viktor.util.EntityUtil;
-import org.viktor.spring.integration.annotation.IT;
-import org.viktor.util.TestDataImporter;
 
 import javax.persistence.EntityManager;
 import java.math.BigDecimal;
@@ -23,18 +21,12 @@ import java.util.stream.Stream;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@IT
 @RequiredArgsConstructor
-class CarRepositoryTest {
+class CarRepositoryTest extends IntegrationTestBase {
 
     private final CarRepository carRepository;
     private final CarCategoryRepository carCategoryRepository;
     private final EntityManager entityManager;
-
-    @BeforeEach
-    void initData() {
-        TestDataImporter.importData(entityManager);
-    }
 
     @Test
     void save() {
@@ -51,6 +43,7 @@ class CarRepositoryTest {
         CarEntity expectedCar = carRepository.findById(car.getId()).get();
 
         carRepository.delete(expectedCar);
+        entityManager.flush();
         entityManager.clear();
 
         assertThat(carRepository.findById(expectedCar.getId())).isEmpty();
@@ -64,7 +57,7 @@ class CarRepositoryTest {
         CarEntity expectedCar = carRepository.findById(car.getId()).get();
 
         expectedCar.setVinCode("12545454er154trerg");
-        carRepository.update(expectedCar);
+        carRepository.saveAndFlush(expectedCar);
         entityManager.clear();
 
         assertThat(carRepository.findById(expectedCar.getId()).get()).isEqualTo(expectedCar);
@@ -91,7 +84,7 @@ class CarRepositoryTest {
     @ParameterizedTest
     @MethodSource("carFilterDataProvider")
     void findAllByFilterQuerydsl(CarFilterDto filter, List<Integer> expectedResult) {
-        List<CarEntity> actualResult = carRepository.findAllByFilterQuerydsl(filter);
+        List<CarEntity> actualResult = carRepository.findAllByFilter(filter);
         List<Integer> actualId = actualResult.stream().map(CarEntity::getId).collect(toList());
 
         assertThat(actualResult).hasSize(expectedResult.size());

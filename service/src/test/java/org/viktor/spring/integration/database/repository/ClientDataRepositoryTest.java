@@ -1,33 +1,25 @@
 package org.viktor.spring.integration.database.repository;
 
 import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.viktor.dao.ClientDataRepository;
-import org.viktor.dao.UserRepository;
+import org.viktor.repository.ClientDataRepository;
+import org.viktor.repository.UserRepository;
 import org.viktor.entity.ClientDataEntity;
+import org.viktor.spring.integration.IntegrationTestBase;
 import org.viktor.util.EntityUtil;
 import org.viktor.entity.UserEntity;
-import org.viktor.spring.integration.annotation.IT;
-import org.viktor.util.TestDataImporter;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@IT
 @RequiredArgsConstructor
-class ClientDataRepositoryTest {
+class ClientDataRepositoryTest extends IntegrationTestBase {
 
     private final ClientDataRepository clientDataRepository;
     private final UserRepository userRepository;
     private final EntityManager entityManager;
-
-    @BeforeEach
-    void initData() {
-        TestDataImporter.importData(entityManager);
-    }
 
     @Test
     void save() {
@@ -44,6 +36,7 @@ class ClientDataRepositoryTest {
         ClientDataEntity expectedClientData = clientDataRepository.findById(clientData.getId()).get();
 
         clientDataRepository.delete(expectedClientData);
+        entityManager.flush();
         entityManager.clear();
 
         assertThat(clientDataRepository.findById(expectedClientData.getId())).isEmpty();
@@ -57,7 +50,7 @@ class ClientDataRepositoryTest {
         ClientDataEntity expectedClientData = clientDataRepository.findById(clientData.getId()).get();
 
         expectedClientData.setDriverLicenceNo("XXXXXXXX");
-        clientDataRepository.update(expectedClientData);
+        clientDataRepository.saveAndFlush(expectedClientData);
         entityManager.clear();
 
         assertThat(clientDataRepository.findById(expectedClientData.getId()).get()).isEqualTo(expectedClientData);

@@ -1,4 +1,4 @@
-package org.viktor.dao;
+package org.viktor.repository;
 
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Predicate;

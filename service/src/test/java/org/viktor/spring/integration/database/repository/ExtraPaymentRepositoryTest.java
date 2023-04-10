@@ -1,30 +1,27 @@
 package org.viktor.spring.integration.database.repository;
 
 import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.viktor.dao.CarCategoryRepository;
-import org.viktor.dao.CarRepository;
-import org.viktor.dao.ExtraPaymentRepository;
-import org.viktor.dao.OrderRepository;
-import org.viktor.dao.UserRepository;
+import org.viktor.repository.CarCategoryRepository;
+import org.viktor.repository.CarRepository;
+import org.viktor.repository.ExtraPaymentRepository;
+import org.viktor.repository.OrderRepository;
+import org.viktor.repository.UserRepository;
 import org.viktor.entity.CarCategoryEntity;
 import org.viktor.entity.CarEntity;
+import org.viktor.spring.integration.IntegrationTestBase;
 import org.viktor.util.EntityUtil;
 import org.viktor.entity.ExtraPaymentEntity;
 import org.viktor.entity.OrderEntity;
 import org.viktor.entity.UserEntity;
-import org.viktor.spring.integration.annotation.IT;
-import org.viktor.util.TestDataImporter;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@IT
 @RequiredArgsConstructor
-class ExtraPaymentRepositoryTest {
+class ExtraPaymentRepositoryTest extends IntegrationTestBase {
 
     private final CarRepository carRepository;
     private final CarCategoryRepository carCategoryRepository;
@@ -32,11 +29,6 @@ class ExtraPaymentRepositoryTest {
     private final OrderRepository orderRepository;
     private final ExtraPaymentRepository extraPaymentRepository;
     private final EntityManager entityManager;
-
-    @BeforeEach
-    void initData() {
-        TestDataImporter.importData(entityManager);
-    }
 
     @Test
     void save() {
@@ -53,6 +45,7 @@ class ExtraPaymentRepositoryTest {
         ExtraPaymentEntity expectedExtraPayment = extraPaymentRepository.findById(extraPayment.getId()).get();
 
         extraPaymentRepository.delete(expectedExtraPayment);
+        entityManager.flush();
         entityManager.clear();
 
         assertThat(extraPaymentRepository.findById(expectedExtraPayment.getId())).isEmpty();
@@ -66,7 +59,7 @@ class ExtraPaymentRepositoryTest {
         ExtraPaymentEntity expectedExtraPayment = extraPaymentRepository.findById(extraPayment.getId()).get();
 
         expectedExtraPayment.setDescription("speeding fine 2023.1.4 14:00 99.99$");
-        extraPaymentRepository.update(expectedExtraPayment);
+        extraPaymentRepository.saveAndFlush(expectedExtraPayment);
         entityManager.clear();
 
         assertThat(extraPaymentRepository.findById(expectedExtraPayment.getId()).get()).isEqualTo(expectedExtraPayment);

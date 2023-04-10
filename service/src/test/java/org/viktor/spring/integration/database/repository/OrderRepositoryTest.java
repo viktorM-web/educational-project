@@ -1,40 +1,32 @@
 package org.viktor.spring.integration.database.repository;
 
 import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.viktor.dao.CarCategoryRepository;
-import org.viktor.dao.CarRepository;
-import org.viktor.dao.OrderRepository;
-import org.viktor.dao.UserRepository;
+import org.viktor.repository.CarCategoryRepository;
+import org.viktor.repository.CarRepository;
+import org.viktor.repository.OrderRepository;
+import org.viktor.repository.UserRepository;
 import org.viktor.entity.CarCategoryEntity;
 import org.viktor.entity.CarEntity;
+import org.viktor.spring.integration.IntegrationTestBase;
 import org.viktor.util.EntityUtil;
 import org.viktor.entity.OrderEntity;
 import org.viktor.entity.Status;
 import org.viktor.entity.UserEntity;
-import org.viktor.spring.integration.annotation.IT;
-import org.viktor.util.TestDataImporter;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@IT
 @RequiredArgsConstructor
-class OrderRepositoryTest {
+class OrderRepositoryTest extends IntegrationTestBase {
 
     private final CarRepository carRepository;
     private final CarCategoryRepository carCategoryRepository;
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
     private final EntityManager entityManager;
-
-    @BeforeEach
-    void initData() {
-        TestDataImporter.importData(entityManager);
-    }
 
     @Test
     void save() {
@@ -51,6 +43,7 @@ class OrderRepositoryTest {
         OrderEntity expectedOrder = orderRepository.findById(order.getId()).get();
 
         orderRepository.delete(expectedOrder);
+        entityManager.flush();
         entityManager.clear();
 
         assertThat(orderRepository.findById(expectedOrder.getId())).isEmpty();
@@ -64,7 +57,7 @@ class OrderRepositoryTest {
         OrderEntity expectedOrder = orderRepository.findById(order.getId()).get();
 
         expectedOrder.setStatus(Status.CANCELED);
-        orderRepository.update(expectedOrder);
+        orderRepository.saveAndFlush(expectedOrder);
         entityManager.clear();
 
         assertThat(orderRepository.findById(expectedOrder.getId()).get()).isEqualTo(expectedOrder);

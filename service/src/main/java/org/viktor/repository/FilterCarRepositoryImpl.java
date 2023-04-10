@@ -1,9 +1,9 @@
-package org.viktor.dao;
+package org.viktor.repository;
 
 import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQuery;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.graph.GraphSemantic;
-import org.springframework.stereotype.Repository;
 import org.viktor.dto.CarFilterDto;
 import org.viktor.entity.CarEntity;
 
@@ -13,14 +13,13 @@ import java.util.List;
 import static org.viktor.entity.QCarCategoryEntity.carCategoryEntity;
 import static org.viktor.entity.QCarEntity.carEntity;
 
-@Repository
-public class CarRepository extends RepositoryBase<Integer, CarEntity> {
+@RequiredArgsConstructor
+public class FilterCarRepositoryImpl implements FilterCarRepository {
 
-    public CarRepository(EntityManager entityManager) {
-        super(CarEntity.class, entityManager);
-    }
+    private final EntityManager entityManager;
 
-    public List<CarEntity> findAllByFilterQuerydsl(CarFilterDto filter) {
+    @Override
+    public List<CarEntity> findAllByFilter(CarFilterDto filter) {
         Predicate predicate = QPredicate.builder()
                 .add(filter.getCategory(), carCategoryEntity.category::eq)
                 .add(filter.getMaxDayPrice(), carCategoryEntity.dayPrice::loe)
