@@ -4,14 +4,6 @@ spring:
     password: test
 
   jpa:
-    properties:
-      hibernate:
-        show_sql: true
-        format_sql: true
-        hbm2ddl:
-          auto: validate
-        current_session_context_class: thread
-        dialect: org.hibernate.dialect.PostgreSQL10Dialect
   output:
     ansi:
       enabled: always

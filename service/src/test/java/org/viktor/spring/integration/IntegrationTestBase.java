@@ -11,7 +11,7 @@ import org.viktor.spring.integration.annotation.IT;
 @Sql("classpath:sql/data.sql")
 public abstract class IntegrationTestBase {
 
-    public static final PostgreSQLContainer<?> container = new PostgreSQLContainer<>("postgres:15.1");
+    private static final PostgreSQLContainer<?> container = new PostgreSQLContainer<>("postgres:15.1");
 
     @BeforeAll
     static void runContainer() {

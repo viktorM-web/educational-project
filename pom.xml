@@ -28,19 +28,6 @@
         <javax.persistence-api>2.2</javax.persistence-api>
     </properties>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.postgresql</groupId>
-                <artifactId>postgresql</artifactId>
-                <version>42.5.4</version>
-                <scope>runtime</scope>
-            </dependency>
-
-
-        </dependencies>
-    </dependencyManagement>
-
     <build>
         <pluginManagement>
             <plugins>
