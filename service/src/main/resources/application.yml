@@ -1,15 +1,19 @@
 spring:
+  mvc:
+    format:
+      date: iso
   datasource:
-    url: jdbc:postgresql://localhost:5432/rent_cars
+    url: jdbc:postgresql://localhost:5433/postgres
     username: postgres
-    password: "0720"
+    password: pass
     driver-class-name: org.postgresql.Driver
-  liquibase:
-    change-log: db.changelog/db.changelog-master.yaml
   jpa:
     properties:
       hibernate:
+        batch_size: 50
+        fetch_size: 50
         show_sql: true
         format_sql: true
         hbm2ddl:
           auto: validate
+    open-in-view: false

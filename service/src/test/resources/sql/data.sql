@@ -1,6 +1,10 @@
-INSERT INTO users (email, password, role)
-VALUES ('ivan@mail.ru', 123, 'CLIENT'),
-       ('petr@mail.ru', 456, 'CLIENT');
+INSERT INTO users (id, email, password, role)
+VALUES (1, 'ivan@mail.ru', 123, 'CLIENT'),
+       (2, 'sveta@mail.ru', 345, 'ADMIN'),
+       (3, 'nastya@mail.ru', 542, 'ADMIN'),
+       (4, 'petr@mail.ru', 456, 'CLIENT');
+
+SELECT SETVAL('users_id_seq', (SELECT MAX(id) FROM users));
 
 INSERT INTO client_data (birthday, date_expiry, driver_experience, driver_licence_no, firstname, lastname, user_id)
 VALUES ('2000-01-03', '2030-01-01', 3, '123456AB', 'Ivan', 'Ivanov',
