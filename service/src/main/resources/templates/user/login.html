@@ -5,9 +5,9 @@
     <title>Login</title>
 </head>
 <body>
-<form action="/login" method="post">
-    <label for="username">Username:
-        <input id="username" type="text" name="username">
+<form action="/users/enter" method="post">
+    <label for="email">Username:
+        <input id="email" type="text" name="email">
     </label><br>
     <label for="password">Password:
         <input id="password" type="password" name="password">
@@ -17,5 +17,8 @@
 <form action="/users/registration">
     <button type="submit">Registration</button>
 </form>
+<div th:if="${error != null}" style="color: red">
+    <span>Email or password is not correct</span>
+</div>
 </body>
 </html>

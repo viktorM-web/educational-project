@@ -8,7 +8,8 @@ import org.viktor.entity.UserEntity;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<UserEntity, Integer>, QuerydslPredicateExecutor<UserEntity> {
+public interface UserRepository extends JpaRepository<UserEntity, Integer>,
+                                        QuerydslPredicateExecutor<UserEntity> {
 
     Optional<UserEntity> findByEmailAndPassword(String email, String password);
 }

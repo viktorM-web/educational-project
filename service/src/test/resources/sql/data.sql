@@ -17,23 +17,23 @@ VALUES ('economy', 40.5),
        ('business', 120.0);
 
 INSERT INTO car(vin_code, brand, model, year_issue, colour, image, seats_quantity, car_category_id)
-VALUES ('11111AA', 'Volkswagen', 'Polo', 2020, 'white', '', 5,
+VALUES ('11111AA', 'Volkswagen', 'Polo', 2020, 'white', 'polo.jpg', 5,
         (SELECT id FROM car_category WHERE category = 'economy')),
-       ('22222BB', 'Volkswagen', 'Golf', 2021, 'red', '', 5,
+       ('22222BB', 'Volkswagen', 'Golf', 2021, 'red', 'golf.jpg', 5,
         (SELECT id FROM car_category WHERE category = 'economy')),
-       ('33333SS', 'Mazda', '3', 2022, 'black', '', 5,
+       ('33333SS', 'Mazda', '3', 2022, 'black', 'mazda3.jpg', 5,
         (SELECT id FROM car_category WHERE category = 'economy')),
-       ('35689QQ', 'BMW', '530', 2020, 'white', '', 5,
+       ('35689QQ', 'BMW', '530', 2020, 'white', 'bmw530.jpg', 5,
         (SELECT id FROM car_category WHERE category = 'premium')),
-       ('QW89564', 'Mercedes', 'E', 2021, 'black', '', 5,
+       ('QW89564', 'Mercedes', 'E', 2021, 'black', 'mercedesE.jpg', 5,
         (SELECT id FROM car_category WHERE category = 'premium')),
-       ('RT48968', 'Audi', 'A5', 2022, 'blue', '', 5,
+       ('RT48968', 'Audi', 'A5', 2022, 'blue', 'audiA5.jpg', 5,
         (SELECT id FROM car_category WHERE category = 'premium')),
-       ('LK25674', 'Mercedes', 'Maybach', 2022, 'black', '', 5,
+       ('LK25674', 'Mercedes', 'Maybach', 2022, 'black', 'maybach.jpg', 5,
         (SELECT id FROM car_category WHERE category = 'business')),
-       ('PO65324', 'Rolls-Royce', 'Ghost', 2021, 'black', '', 5,
+       ('PO65324', 'Rolls-Royce', 'Ghost', 2021, 'black', 'RR.jpg', 5,
         (SELECT id FROM car_category WHERE category = 'business')),
-       ('UY45873', 'Mercedes', 'V', 2020, 'white', '', 6,
+       ('UY45873', 'Mercedes', 'V', 2020, 'white', 'mercedesV.jpg', 6,
         (SELECT id FROM car_category WHERE category = 'business'));
 
 INSERT INTO orders(start_date_use, expiration_date, status, car_id, user_id)

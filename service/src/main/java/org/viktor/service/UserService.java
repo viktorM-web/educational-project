@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.viktor.dto.LoginDto;
 import org.viktor.dto.UserCreateDto;
 import org.viktor.dto.UserFilter;
 import org.viktor.dto.UserReadDto;
@@ -26,6 +27,11 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserReadMapper userReadMapper;
     private final UserCreateMapper userCreateMapper;
+
+    public Optional<UserReadDto> login(LoginDto login) {
+        return userRepository.findByEmailAndPassword(login.getEmail(), login.getPassword())
+                .map(userReadMapper::map);
+    }
 
     public Page<UserReadDto> findAll(UserFilter filter, Pageable pageable) {
         var predicate = QPredicate.builder()

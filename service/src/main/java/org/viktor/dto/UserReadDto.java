@@ -8,6 +8,6 @@ public class UserReadDto {
 
     Integer id;
     String email;
-    Role role;
     String password;
+    Role role;
 }

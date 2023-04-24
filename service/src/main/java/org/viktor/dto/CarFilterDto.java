@@ -16,5 +16,4 @@ public class CarFilterDto {
     Integer minSeatsQuantity;
     String category;
     BigDecimal maxDayPrice;
-
 }

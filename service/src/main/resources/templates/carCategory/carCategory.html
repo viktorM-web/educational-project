@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Car category</title>
+</head>
+<body>
+<form th:action="@{/carCategories/{carCategoriesId}/update(carCategories=${carCategory.id})}" method="post"
+      th:object="${carCategory}">
+    <label for="category">Category
+        <input id="category" type="text" name="category" th:value="*{category}">
+    </label>
+    <label for="dayPrice">Day price
+        <input id="dayPrice" type="text" name="dayPrice" th:value="*{dayPrice}">
+    </label>
+    <div>
+        <button type="submit">Update</button>
+    </div>
+</form>
+<form th:action="@{/carCategories/{carCategoriesId}/delete(carCategories=${carCategory.id})}" method="post">
+    <button type="submit">Remove</button>
+</form>
+</body>
+</html>

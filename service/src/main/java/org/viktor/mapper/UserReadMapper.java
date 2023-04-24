@@ -14,8 +14,8 @@ public class UserReadMapper implements Mapper<UserEntity, UserReadDto> {
         return new UserReadDto(
                 object.getId(),
                 object.getEmail(),
-                object.getRole(),
-                object.getPassword()
+                object.getPassword(),
+                object.getRole()
         );
     }
 }
