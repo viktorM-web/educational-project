@@ -46,8 +46,8 @@ public class ClientController {
             redirectAttributes.addFlashAttribute("client", client);
             return "redirect:/clients/registration";
         }
-        var clientReadDto = clientService.create(client);
-        return "redirect:/users/" + clientReadDto.getUser().getId();
+        clientService.create(client);
+        return "redirect:/login";
     }
 
     @GetMapping

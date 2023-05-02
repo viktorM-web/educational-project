@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Integer>,
-                                        QuerydslPredicateExecutor<UserEntity> {
+        QuerydslPredicateExecutor<UserEntity> {
 
-    Optional<UserEntity> findByEmailAndPassword(String email, String password);
+    Optional<UserEntity> findByEmail(String email);
 }

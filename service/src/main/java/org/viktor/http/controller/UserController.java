@@ -1,5 +1,6 @@
 package org.viktor.http.controller;
 
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -14,12 +15,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.viktor.dto.LoginDto;
 import org.viktor.dto.PageResponse;
 import org.viktor.dto.UserCreateDto;
 import org.viktor.dto.UserFilter;
 import org.viktor.entity.Role;
 import org.viktor.service.UserService;
+import org.viktor.validation.group.CreateAction;
 
 @Controller
 @RequestMapping("/users")
@@ -27,21 +28,6 @@ import org.viktor.service.UserService;
 public class UserController {
 
     private final UserService userService;
-
-    @PostMapping("/enter")
-    public String enter(Model model,
-                        @Validated LoginDto loginDto,
-                        RedirectAttributes redirectAttributes) {
-        var userReadDto = userService.login(loginDto);
-        if (userReadDto.isPresent()) {
-            model.addAttribute("user", userReadDto.get());
-            return "user/user";
-        } else {
-            redirectAttributes.addFlashAttribute("error",
-                    new ResponseStatusException(HttpStatus.NOT_FOUND));
-            return "redirect:/login";
-        }
-    }
 
     @GetMapping("/registration")
     public String registration(Model model,
@@ -53,7 +39,8 @@ public class UserController {
 
     @PostMapping
     public String create(Model model,
-                         @ModelAttribute("user") @Validated UserCreateDto user,
+                         @ModelAttribute("user")
+                         @Validated({Builder.Default.class, CreateAction.class}) UserCreateDto user,
                          BindingResult bindingResult,
                          RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
@@ -64,7 +51,7 @@ public class UserController {
             var userReadDto = userService.create(user);
             redirectAttributes.addFlashAttribute("user", userReadDto);
             if (user.getRole().equals(Role.ADMIN)) {
-                return "redirect:/users/" + userReadDto.getId();
+                return "redirect:/login";
             }
             return "redirect:/clients/registration";
         }
