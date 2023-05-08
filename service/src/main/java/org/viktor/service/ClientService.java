@@ -49,6 +49,10 @@ public class ClientService {
     public Optional<ClientReadDto> findById(Integer id) {
         return clientRepository.findById(id)
                 .map(clientReadMapper::map);
+
+    }public Optional<ClientReadDto> findByUserId(Integer id) {
+        return clientRepository.findByUserId(id)
+                .map(clientReadMapper::map);
     }
 
     @Transactional

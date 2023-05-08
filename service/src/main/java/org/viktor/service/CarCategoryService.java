@@ -3,6 +3,7 @@ package org.viktor.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.viktor.dto.CarCategoryCreateDto;
@@ -48,6 +49,7 @@ public class CarCategoryService {
     }
 
     @Transactional
+    @PreAuthorize("hasAuthority('ADMIN')")
     public CarCategoryReadDto create(CarCategoryCreateDto carCategoryDto) {
         return Optional.of(carCategoryDto)
                 .map(carCategoryCreateMapper::map)
@@ -57,6 +59,7 @@ public class CarCategoryService {
     }
 
     @Transactional
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Optional<CarCategoryReadDto> update(Integer id, CarCategoryCreateDto carCategoryDto) {
         return carCategoryRepository.findById(id)
                 .map(entity -> carCategoryCreateMapper.map(carCategoryDto, entity))
@@ -65,6 +68,7 @@ public class CarCategoryService {
     }
 
     @Transactional
+    @PreAuthorize("hasAuthority('ADMIN')")
     public boolean delete(Integer id) {
         return carCategoryRepository.findById(id)
                 .map(entity -> {

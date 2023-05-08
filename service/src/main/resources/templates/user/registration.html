@@ -5,6 +5,7 @@
     <title>User registration</title>
 </head>
 <body>
+<div th:insert="~{fragment :: locale}"></div>
 <form th:action="@{/users}" method="post" th:object="${user}">
     <label for="email"> Email:
         <input id="email" type="text" name="email" th:value="*{email}">

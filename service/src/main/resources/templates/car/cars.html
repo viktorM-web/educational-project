@@ -5,7 +5,12 @@
     <title>Cars</title>
 </head>
 <body>
-<form action="/cars">
+<form th:action="@{/cars}">
+
+    <div th:insert="~{fragment :: header}"></div>
+
+    <div th:insert="~{fragment :: profile}"></div>
+
     <label for="brand">Brand
         <input id="brand" type="text" name="brand" th:value="${filter.brand}">
     </label>
@@ -39,7 +44,7 @@
 </form>
 <div th:each="car : ${cars.content}">
     <label th:if="${car.image}">
-        <img th:src="@{/api/v1/cars/{carId}/avatar(carId=${car.id})}" alt="Car image">
+        <img th:src="@{/api/v1/cars/{carId}/avatar(carId=${car.id})}" width="30%" height="250" alt="Car image">
     </label>
     <a th:href="@{'/cars/' + ${car.id}}" th:text="|${car.getBrand()} ${car.model} ${car.carCategory.dayPrice} |">Car</a>
 </div>

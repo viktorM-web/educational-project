@@ -5,6 +5,9 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.viktor.entity.ClientDataEntity;
 import org.viktor.entity.UserEntity;
 
+import java.util.Optional;
+
 public interface ClientDataRepository extends JpaRepository<ClientDataEntity, Integer>,
                                                 QuerydslPredicateExecutor<ClientDataEntity> {
+    Optional<ClientDataEntity> findByUserId(Integer id);
 }

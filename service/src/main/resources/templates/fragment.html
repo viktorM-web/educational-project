@@ -21,5 +21,10 @@
         </select>
     </form>
 </div>
+<div th:fragment="profile">
+    <form th:action="@{'/users/'+${#authorization.authentication.principal.id}}">
+        <button type="submit">Profile</button>
+    </form>
+</div>
 </body>
 </html>
