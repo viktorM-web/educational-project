@@ -3,9 +3,11 @@ package org.viktor.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.viktor.dto.LoginDto;
 import org.viktor.dto.UserCreateDto;
 import org.viktor.dto.UserFilter;
 import org.viktor.dto.UserReadDto;
@@ -14,6 +16,7 @@ import org.viktor.mapper.UserReadMapper;
 import org.viktor.repository.QPredicate;
 import org.viktor.repository.UserRepository;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,16 +25,11 @@ import static org.viktor.entity.QUserEntity.userEntity;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class UserService {
+public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final UserReadMapper userReadMapper;
     private final UserCreateMapper userCreateMapper;
-
-    public Optional<UserReadDto> login(LoginDto login) {
-        return userRepository.findByEmailAndPassword(login.getEmail(), login.getPassword())
-                .map(userReadMapper::map);
-    }
 
     public Page<UserReadDto> findAll(UserFilter filter, Pageable pageable) {
         var predicate = QPredicate.builder()
@@ -79,5 +77,16 @@ public class UserService {
                     return true;
                 })
                 .orElse(false);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByEmail(username)
+                .map(user -> new org.springframework.security.core.userdetails.User(
+                        user.getEmail(),
+                        user.getPassword(),
+                        Collections.singleton(user.getRole())
+                ))
+                .orElseThrow(() -> new UsernameNotFoundException("Failed to retrieve user: " + username));
     }
 }

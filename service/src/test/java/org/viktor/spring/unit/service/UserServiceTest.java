@@ -9,7 +9,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.viktor.dto.LoginDto;
 import org.viktor.dto.UserCreateDto;
 import org.viktor.dto.UserFilter;
 import org.viktor.dto.UserReadDto;
@@ -26,7 +25,6 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.viktor.entity.QUserEntity.userEntity;
@@ -47,42 +45,18 @@ class UserServiceTest {
     private UserService userService;
 
     @Test
-    void login() {
-        var userEntity = Optional.of(
-                new UserEntity(1, "test1@goodle.com", "111", Role.ADMIN, null));
-
-        var expectedResponse = new UserReadDto(1, "test1@goodle.com", "111", Role.ADMIN);
-        var loginDto = new LoginDto("test@goople.com", "111");
-
-        doReturn(userEntity).when(userRepository).findByEmailAndPassword(loginDto.getEmail(), loginDto.getPassword());
-
-        doReturn(new UserReadDto(1, "test1@goodle.com", "111", Role.ADMIN))
-                .when(userReadMapper).map(any(UserEntity.class));
-
-        var actualResult = userService.login(loginDto);
-
-        assertThat(actualResult.isPresent()).isTrue();
-        actualResult.ifPresent(user -> {
-            assertEquals(expectedResponse.getId(), user.getId());
-            assertEquals(expectedResponse.getEmail(), user.getEmail());
-            assertEquals(expectedResponse.getPassword(), user.getPassword());
-            assertEquals(expectedResponse.getRole(), user.getRole());
-        });
-    }
-
-    @Test
     void findAll() {
         var users = List.of(
                 new UserEntity(1, "test1@goodle.com", "111", Role.ADMIN, null),
                 new UserEntity(2, "test2@goodle.com", "111", Role.CLIENT, null));
 
         var expectedResponse = List.of(
-                new UserReadDto(1, "test1@goodle.com", "111", Role.ADMIN),
-                new UserReadDto(2, "test2@goodle.com", "111", Role.CLIENT));
+                new UserReadDto(1, "test1@goodle.com", Role.ADMIN),
+                new UserReadDto(2, "test2@goodle.com", Role.CLIENT));
 
         doReturn(users).when(userRepository).findAll();
-        doReturn(new UserReadDto(1, "test1@goodle.com", "111", Role.ADMIN),
-                new UserReadDto(2, "test2@goodle.com", "111", Role.CLIENT))
+        doReturn(new UserReadDto(1, "test1@goodle.com", Role.ADMIN),
+                new UserReadDto(2, "test2@goodle.com", Role.CLIENT))
                 .when(userReadMapper).map(any(UserEntity.class));
 
         var actualResponse = userService.findAll();
@@ -102,13 +76,13 @@ class UserServiceTest {
                 new UserEntity(2, "test2@goodle.com", "111", Role.CLIENT, null)));
 
         Page<UserReadDto> expectedResponse = new PageImpl<>(List.of(
-                new UserReadDto(1, "test1@goodle.com", "111", Role.ADMIN),
-                new UserReadDto(2, "test2@goodle.com", "111", Role.CLIENT)));
+                new UserReadDto(1, "test1@goodle.com", Role.ADMIN),
+                new UserReadDto(2, "test2@goodle.com", Role.CLIENT)));
 
         doReturn(users).when(userRepository).findAll(predicate, pageable);
 
-        doReturn(new UserReadDto(1, "test1@goodle.com", "111", Role.ADMIN),
-                new UserReadDto(2, "test2@goodle.com", "111", Role.CLIENT))
+        doReturn(new UserReadDto(1, "test1@goodle.com", Role.ADMIN),
+                new UserReadDto(2, "test2@goodle.com", Role.CLIENT))
                 .when(userReadMapper).map(any(UserEntity.class));
 
         var actualResponse = userService.findAll(filter, pageable);
@@ -121,7 +95,8 @@ class UserServiceTest {
     void findById() {
         var userEntity = Optional.of(
                 new UserEntity(1, "test1@goodle.com", "111", Role.ADMIN, null));
-        var expectedResponse = new UserReadDto(1, "test1@goodle.com", "111", Role.ADMIN);
+        var expectedResponse = new UserReadDto(1, "test1@goodle.com", Role.ADMIN);
+
         doReturn(userEntity).when(userRepository).findById(1);
         doReturn(expectedResponse).when(userReadMapper).map(any(UserEntity.class));
 
@@ -135,7 +110,7 @@ class UserServiceTest {
         var userCreateDto = new UserCreateDto("test1@goodle.com", "111", Role.ADMIN);
         var user = new UserEntity(null, "test1@goodle.com", "111", Role.ADMIN, null);
         var userAfterSave = new UserEntity(1, "test1@goodle.com", "111", Role.ADMIN, null);
-        var expectedResponse = new UserReadDto(1, "test1@goodle.com", "111", Role.ADMIN);
+        var expectedResponse = new UserReadDto(1, "test1@goodle.com", Role.ADMIN);
         doReturn(user).when(userCreateMapper).map(userCreateDto);
         doReturn(userAfterSave).when(userRepository).save(user);
         doReturn(expectedResponse).when(userReadMapper).map(userAfterSave);
@@ -151,7 +126,8 @@ class UserServiceTest {
         var user = Optional.of(new UserEntity(1, "test1@goodle.com", "111", Role.ADMIN, null));
         var userUpdateDto = new UserCreateDto("test2@goodle.com", "111", Role.CLIENT);
         var updatedUser = new UserEntity(1, "test2@goodle.com", "111", Role.CLIENT, null);
-        var expectedResponse = new UserReadDto(1, "test2@goodle.com", "111", Role.CLIENT);
+        var expectedResponse = new UserReadDto(1, "test2@goodle.com", Role.CLIENT);
+
         doReturn(user).when(userRepository).findById(1);
         doReturn(updatedUser).when(userCreateMapper).map(userUpdateDto, user.get());
         doReturn(updatedUser).when(userRepository).saveAndFlush(updatedUser);
