@@ -3,6 +3,9 @@ package org.viktor.http.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,8 +20,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.viktor.dto.CarCreateDto;
 import org.viktor.dto.CarFilterDto;
 import org.viktor.dto.PageResponse;
+import org.viktor.dto.UserReadDto;
+import org.viktor.entity.Role;
+import org.viktor.entity.Status;
+import org.viktor.security.UserSecurity;
 import org.viktor.service.CarCategoryService;
 import org.viktor.service.CarService;
+import org.viktor.service.ClientService;
+import org.viktor.service.UserService;
+
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/cars")
@@ -26,6 +37,8 @@ import org.viktor.service.CarService;
 public class CarController {
 
     private final CarService carService;
+    private final ClientService clientService;
+    private final UserService userService;
     private final CarCategoryService categoryServiceService;
 
     @GetMapping
@@ -48,10 +61,15 @@ public class CarController {
 
     @GetMapping("/{id}")
     public String findById(@PathVariable("id") Integer id,
-                           Model model) {
+                           Model model,
+                           @AuthenticationPrincipal UserDetails userDetails) {
         return carService.findById(id)
                 .map(car -> {
+                    model.addAttribute("user", (UserSecurity)userDetails);
+                    model.addAttribute("admin", Role.ADMIN);
                     model.addAttribute("car", car);
+                    model.addAttribute("client", clientService.findByUserId(((UserSecurity)userDetails).getId()));
+                    model.addAttribute("status", Status.PROCESSING);
                     model.addAttribute("categories", categoryServiceService.findAll());
                     return "car/car";
                 })

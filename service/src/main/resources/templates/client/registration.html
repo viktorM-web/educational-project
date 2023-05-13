@@ -5,6 +5,7 @@
     <title>Client registration</title>
 </head>
 <body>
+<div th:insert="~{fragment :: locale}"></div>
 <form th:action="@{/clients/{userId}(userId=${user.id})}" method="post" th:object="${client}">
     <label for="firstname"> Firstname:
         <input id="firstname" type="text" name="firstname" th:value="*{firstname}">

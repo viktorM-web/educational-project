@@ -10,10 +10,14 @@ import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+import org.viktor.security.Identificational;
+import org.viktor.security.UserSecurity;
 import org.viktor.service.UserService;
 
 import java.lang.reflect.Proxy;
 import java.util.Set;
+
+import static org.viktor.entity.Role.ADMIN;
 
 @Configuration
 @EnableMethodSecurity
@@ -26,18 +30,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(urlConfig -> urlConfig
-                        .antMatchers("/login", "/users", "/users/registration").permitAll()
+                        .antMatchers("/login","/users", "/users/registration",
+                                "/clients/registration", "/clients/**").permitAll()
+                        .antMatchers("/cars/create").hasAuthority(ADMIN.getAuthority())
                         .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
                         .loginPage("/login")
-                        .defaultSuccessUrl("/users"))
+                        .defaultSuccessUrl("/cars"))
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login"))
                 .oauth2Login(config -> config
                         .loginPage("/login")
-                        .defaultSuccessUrl("/users")
+                        .defaultSuccessUrl("/cars")
+
                         .userInfoEndpoint(userInfo -> userInfo.oidcUserService(oidcUserService())
                         )
                 );
@@ -46,15 +53,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService() {
         return userRequest -> {
             String email = userRequest.getIdToken().getClaim("email");
-            UserDetails userDetails = userService.loadUserByUsername(email);
-            var defaultOidcUser = new DefaultOidcUser(userDetails.getAuthorities(), userRequest.getIdToken());
+            UserSecurity user = userService.loadUserByUsername(email);
+            var defaultOidcUser = new DefaultOidcUser(user.getAuthorities(), userRequest.getIdToken());
 
-            var userDetailsMethods = Set.of(UserDetails.class.getMethods());
+            var userDetailsMethods = Set.of(UserSecurity.class.getMethods());
 
             return (OidcUser) Proxy.newProxyInstance(SecurityConfiguration.class.getClassLoader(),
-                    new Class[]{UserDetails.class, OidcUser.class},
+                    new Class[]{UserDetails.class, OidcUser.class, Identificational.class},
                     (proxy, method, args) -> userDetailsMethods.contains(method)
-                            ? method.invoke(userDetails, args)
+                            ? method.invoke(user, args)
                             : method.invoke(defaultOidcUser, args));
         };
     }

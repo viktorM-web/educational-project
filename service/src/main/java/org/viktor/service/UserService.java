@@ -15,6 +15,7 @@ import org.viktor.mapper.UserCreateMapper;
 import org.viktor.mapper.UserReadMapper;
 import org.viktor.repository.QPredicate;
 import org.viktor.repository.UserRepository;
+import org.viktor.security.UserSecurity;
 
 import java.util.Collections;
 import java.util.List;
@@ -51,6 +52,11 @@ public class UserService implements UserDetailsService {
                 .map(userReadMapper::map);
     }
 
+    public Optional<UserReadDto> findByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .map(userReadMapper::map);
+    }
+
     @Transactional
     public UserReadDto create(UserCreateDto userDto) {
         return Optional.of(userDto)
@@ -80,12 +86,13 @@ public class UserService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserSecurity loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByEmail(username)
-                .map(user -> new org.springframework.security.core.userdetails.User(
+                .map(user -> new UserSecurity(
                         user.getEmail(),
                         user.getPassword(),
-                        Collections.singleton(user.getRole())
+                        Collections.singleton(user.getRole()),
+                        user.getId()
                 ))
                 .orElseThrow(() -> new UsernameNotFoundException("Failed to retrieve user: " + username));
     }

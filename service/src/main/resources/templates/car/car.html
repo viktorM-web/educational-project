@@ -25,7 +25,7 @@
         <input id="seatsQuantity" type="number" name="seatsQuantity" th:value="*{car.seatsQuantity}">
     </label><br>
     <div th:if="${car.image}">
-        <img th:src="@{/api/v1/cars/{carId}/avatar(carId=${car.id})}" alt="Car image">
+        <img th:src="@{/api/v1/cars/{carId}/avatar(carId=${car.id})}" width="30%" height="250" alt="Car image">
     </div>
     <label for="image"> Image:
         <input id="image" type="file" name="image">
@@ -41,10 +41,31 @@
             </select>
         </label><br>
     </div>
-    <button type="submit">Update</button>
+    <button th:if="${user.authorities.contains(admin)}" type="submit">Update</button>
+</form>
+<form th:action="@{/cars/{carId}/delete(carId=${car.id})}" method="post">
+    <button th:if="${user.authorities.contains(admin)}" type="submit" name="carId" th:value="${car.id}">Remove</button>
 </form>
 <form th:action="@{/orders}" method="post">
-    <button type="submit" name="carId" th:value="${car.id}">Remove</button>
+    <label for="userId">
+        <input id="userId" type="hidden" name="userId" th:value="*{user.id}">
+    </label><br>
+    <label for="carId">
+        <input id="carId" type="hidden" name="carId" th:value="*{car.id}">
+    </label><br>
+    <label for="dataStart"> Start:
+        <input id="dataStart" type="datetime-local" name="startDateUse">
+    </label><br>
+    <label for="dataFinish"> Finish:
+        <input id="dataFinish" type="datetime-local" name="expirationDate">
+    </label><br>
+    <label for="status"> Status:
+        <input id="status" type="hidden" name="status" th:value="*{status}">
+    </label><br>
+    <button th:if="${client}" type="submit">make order</button>
 </form>
+<div th:if="${errors}">
+    <p style="color: red" th:each="error : ${errors}" th:text="${error.defaultMessage}">Error message</p>
+</div>
 </body>
 </html>

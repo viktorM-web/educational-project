@@ -2,6 +2,7 @@ spring:
   mvc:
     format:
       date: iso
+      date-time: iso
   datasource:
     url: jdbc:postgresql://localhost:5433/postgres
     username: postgres
