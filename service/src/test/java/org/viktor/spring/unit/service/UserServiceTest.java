@@ -96,6 +96,7 @@ class UserServiceTest {
         var userEntity = Optional.of(
                 new UserEntity(1, "test1@goodle.com", "111", Role.ADMIN, null));
         var expectedResponse = new UserReadDto(1, "test1@goodle.com", Role.ADMIN);
+
         doReturn(userEntity).when(userRepository).findById(1);
         doReturn(expectedResponse).when(userReadMapper).map(any(UserEntity.class));
 
@@ -126,6 +127,7 @@ class UserServiceTest {
         var userUpdateDto = new UserCreateDto("test2@goodle.com", "111", Role.CLIENT);
         var updatedUser = new UserEntity(1, "test2@goodle.com", "111", Role.CLIENT, null);
         var expectedResponse = new UserReadDto(1, "test2@goodle.com", Role.CLIENT);
+
         doReturn(user).when(userRepository).findById(1);
         doReturn(updatedUser).when(userCreateMapper).map(userUpdateDto, user.get());
         doReturn(updatedUser).when(userRepository).saveAndFlush(updatedUser);
