@@ -1,6 +1,7 @@
 package org.viktor.dto;
 
 import lombok.Value;
+import lombok.experimental.FieldNameConstants;
 
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotBlank;
@@ -10,7 +11,7 @@ import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
 @Value
-
+@FieldNameConstants
 public class ClientCreatDto {
 
     @Positive

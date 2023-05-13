@@ -77,6 +77,17 @@ class ExtraPaymentRepositoryTest extends IntegrationTestBase {
     }
 
     @Test
+    void findByOrderId() {
+        ExtraPaymentEntity extraPayment = savePayment();
+        entityManager.clear();
+
+        ExtraPaymentEntity expectedExtraPayment = extraPaymentRepository.findByOrderId(extraPayment.getOrder().getId()).get();
+        entityManager.clear();
+
+        assertThat(expectedExtraPayment.getDescription()).isEqualTo("test");
+    }
+
+    @Test
     void findAll() {
         List<ExtraPaymentEntity> expectedExtraPayment = extraPaymentRepository.findAll();
         entityManager.clear();

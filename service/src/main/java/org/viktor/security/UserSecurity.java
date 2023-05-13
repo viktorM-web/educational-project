@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.User;
 import java.util.Collection;
 
 @Getter
-public class UserSecurity extends User implements Identificational <Integer> {
+public class UserSecurity extends User implements Identificational<Integer> {
 
     private final Integer id;
 

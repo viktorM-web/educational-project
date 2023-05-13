@@ -7,7 +7,7 @@ import org.viktor.entity.OrderEntity;
 import java.util.List;
 
 public interface OrderRepository extends JpaRepository<OrderEntity, Integer>,
-                                            QuerydslPredicateExecutor<OrderEntity> {
+        QuerydslPredicateExecutor<OrderEntity> {
 
     List<OrderEntity> findAllByCarId(Integer carId);
 }

@@ -21,20 +21,20 @@ public class OrderDataValidator implements ConstraintValidator<OrderData, OrderC
     @Override
     public boolean isValid(OrderCreateDto value, ConstraintValidatorContext context) {
         var client = clientDataRepository.findByUserId(value.getUserId());
-        if(client.isEmpty()){
+        if (client.isEmpty() || value.getStartDateUse() == null || value.getExpirationDate() == null) {
             return false;
-        }else{
-            if(value.getStartDateUse().toLocalDate()
-                    .isAfter(client.get().getDateExpiry())){
+        } else {
+            if (value.getStartDateUse().toLocalDate().isAfter(client.get().getDateExpiry())
+                || value.getExpirationDate().toLocalDate().isAfter(client.get().getDateExpiry())) {
                 return false;
             }
             var orders = orderRepository.findAllByCarId(value.getCarId());
             for (OrderEntity order : orders) {
-                if (value.getStartDateUse().isAfter(order.getStartDateUse()) &&
-                    value.getStartDateUse().isBefore(order.getExpirationDate()) ||
-                    value.getExpirationDate().isAfter(order.getStartDateUse()) &&
-                    value.getExpirationDate().isBefore(order.getExpirationDate())
-                ) return false;
+                    if (value.getStartDateUse().isAfter(order.getStartDateUse()) &&
+                        value.getStartDateUse().isBefore(order.getExpirationDate()) ||
+                        value.getExpirationDate().isAfter(order.getStartDateUse()) &&
+                        value.getExpirationDate().isBefore(order.getExpirationDate())
+                    ) return false;
             }
             return true;
         }

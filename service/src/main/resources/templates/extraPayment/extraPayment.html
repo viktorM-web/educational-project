@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Extra Payment</title>
+</head>
+<body>
+<div th:insert="~{fragment :: header}"></div>
+<div th:insert="~{fragment :: profile}"></div>
+<form th:action="@{'/extra-payments/'+${extraPayment.id} + '/update'}" method="post">
+    <label for="description"> Description:
+        <input id="description" type="text" name="description" th:value="${extraPayment.description}">
+    </label><br>
+    <label for="price"> Price:
+        <input id="price" type="text" name="price" th:value="${extraPayment.price}">
+    </label><br>
+    <button th:if="${#authentication.getAuthorities().contains(admin)}" type="submit" name="orderId"
+            th:value="${extraPayment.order.id}">Update
+    </button>
+</form>
+<form th:action="@{'/extra-payments/'+ ${extraPayment.id} + '/delete'}" method="post">
+    <button th:if="${#authentication.getAuthorities().contains(admin)}">Remove</button>
+</form>
+</body>
+</html>

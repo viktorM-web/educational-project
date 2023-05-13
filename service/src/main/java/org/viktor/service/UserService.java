@@ -3,7 +3,7 @@ package org.viktor.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -41,6 +41,7 @@ public class UserService implements UserDetailsService {
                 .map(userReadMapper::map);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<UserReadDto> findAll() {
         return userRepository.findAll().stream()
                 .map(userReadMapper::map)
@@ -49,11 +50,6 @@ public class UserService implements UserDetailsService {
 
     public Optional<UserReadDto> findById(Integer id) {
         return userRepository.findById(id)
-                .map(userReadMapper::map);
-    }
-
-    public Optional<UserReadDto> findByEmail(String email) {
-        return userRepository.findByEmail(email)
                 .map(userReadMapper::map);
     }
 

@@ -18,10 +18,12 @@ import org.viktor.mapper.UserCreateMapper;
 import org.viktor.mapper.UserReadMapper;
 import org.viktor.repository.QPredicate;
 import org.viktor.repository.UserRepository;
+import org.viktor.security.UserSecurity;
 import org.viktor.service.UserService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -144,6 +146,18 @@ class UserServiceTest {
         var expectedResult = userService.delete(1);
 
         assertTrue(expectedResult);
+    }
+
+    @Test
+    void loadUserByUsername(){
+        var expectedUserSecurity =
+                new UserSecurity("ivan@mail.ru", "{noop}123", Set.of(Role.ADMIN), 1);
+        var userEntity = new UserEntity(1, "ivan@mail.ru", "{noop}123", Role.ADMIN, null);
+        doReturn(Optional.of(userEntity)).when(userRepository).findByEmail("ivan@mail.ru");
+
+        var actualUserSecurity = userService.loadUserByUsername("ivan@mail.ru");
+
+        assertThat(expectedUserSecurity).isEqualTo(actualUserSecurity);
     }
 
     private Predicate buildPredicate(UserFilter filter) {

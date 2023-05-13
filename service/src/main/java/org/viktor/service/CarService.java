@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -65,6 +66,7 @@ public class CarService {
     }
 
     @Transactional
+    @PreAuthorize("hasAuthority('ADMIN')")
     public CarReadDto create(CarCreateDto carDto) {
         return Optional.of(carDto)
                 .map(dto -> {
@@ -84,6 +86,7 @@ public class CarService {
     }
 
     @Transactional
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Optional<CarReadDto> update(Integer id, CarCreateDto carCreateDto) {
         return carRepository.findById(id)
                 .map(entity -> {
@@ -95,6 +98,7 @@ public class CarService {
     }
 
     @Transactional
+    @PreAuthorize("hasAuthority('ADMIN')")
     public boolean delete(Integer id) {
         return carRepository.findById(id)
                 .map(entity -> {

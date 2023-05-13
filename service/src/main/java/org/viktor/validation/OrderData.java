@@ -1,5 +1,6 @@
 package org.viktor.validation;
 
+import org.junit.jupiter.api.Order;
 import org.viktor.validation.impl.OrderDataValidator;
 
 import javax.validation.Constraint;

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Orders</title>
+</head>
+<body>
+<div th:insert="~{fragment :: header}"></div>
+
+<div th:insert="~{fragment :: profile}"></div>
+
+<form th:action="@{'/orders/' + ${order.id} + '/update'}" method="post">
+
+    <label for="user" th:text="| User ${order.user.email}|"> User:
+        <input id="user" type="hidden" name="userId" th:value="*{order.user.id}">
+    </label><br>
+    <div>
+        <label for="car">Car:
+            <select id="car" name="carId">
+                <option th:each="car : ${cars}"
+                        th:selected="${car.id == order.car.id}"
+                        th:value="${car.id}"
+                        th:text="|${car.id} ${car.brand} ${car.model}|">Car
+                </option>
+            </select>
+        </label><br>
+    </div>
+    <label for="dataStart"> Start use:
+        <input id="dataStart" type="datetime-local" name="startDateUse" th:value="${order.getStartDateUse()}">
+    </label><br>
+    <label for="dataFinish"> Finish use:
+        <input id="dataFinish" type="datetime-local" name="expirationDate" th:value="${order.getExpirationDate()}">
+    </label><br>
+    <div>
+        <label for="status">Status:
+            <select id="status" name="status">
+                <option></option>
+                <option th:each="status : ${statuses}"
+                        th:selected="${status.equals(order.status)}"
+                        th:value="${status}"
+                        th:text="${status.name()}">Status
+                </option>
+            </select>
+        </label><br>
+    </div>
+    <button th:if="${#authentication.getAuthorities().contains(admin)}" type="submit">Update</button>
+</form>
+
+<form th:if="${order.status.name().equals('PROCESSING') || #authentication.getAuthorities().contains(admin)}"
+      th:action="@{/orders/{orderId}/delete(orderId=${order.id})}"
+      method="post">
+    <button type="submit">Cancel</button>
+</form>
+
+<div th:if="${extraPayment.isPresent()}">
+    <a th:href="@{'/extra-payments/' + ${extraPayment.get().id}}">Look extraPayment</a>
+</div>
+
+<div th:if="${#authentication.getAuthorities().contains(admin) && extraPayment.isEmpty()}">
+    <form th:action="@{/extra-payments}" method="post">
+        <label for="description"> Description:
+            <input id="description" type="text" name="description">
+        </label><br>
+        <label for="price"> Price:
+            <input id="price" type="text" name="price">
+        </label><br>
+        <label for="orderId">
+            <input id="orderId" type="hidden" name="orderId" th:value="${order.id}">
+        </label><br>
+        <button type="submit">Create extra payment</button>
+    </form>
+</div>
+
+<div th:if="${errors}">
+    <p style="color: red" th:each="error : ${errors}" th:text="${error.defaultMessage}">Error message</p>
+</div>
+</body>
+</html>

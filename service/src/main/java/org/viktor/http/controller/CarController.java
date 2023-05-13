@@ -3,7 +3,6 @@ package org.viktor.http.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -20,16 +19,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.viktor.dto.CarCreateDto;
 import org.viktor.dto.CarFilterDto;
 import org.viktor.dto.PageResponse;
-import org.viktor.dto.UserReadDto;
 import org.viktor.entity.Role;
 import org.viktor.entity.Status;
 import org.viktor.security.UserSecurity;
 import org.viktor.service.CarCategoryService;
 import org.viktor.service.CarService;
 import org.viktor.service.ClientService;
-import org.viktor.service.UserService;
-
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/cars")
@@ -38,7 +33,6 @@ public class CarController {
 
     private final CarService carService;
     private final ClientService clientService;
-    private final UserService userService;
     private final CarCategoryService categoryServiceService;
 
     @GetMapping
@@ -65,10 +59,10 @@ public class CarController {
                            @AuthenticationPrincipal UserDetails userDetails) {
         return carService.findById(id)
                 .map(car -> {
-                    model.addAttribute("user", (UserSecurity)userDetails);
+                    model.addAttribute("user", (UserSecurity) userDetails);
                     model.addAttribute("admin", Role.ADMIN);
                     model.addAttribute("car", car);
-                    model.addAttribute("client", clientService.findByUserId(((UserSecurity)userDetails).getId()));
+                    model.addAttribute("client", clientService.findByUserId(((UserSecurity) userDetails).getId()));
                     model.addAttribute("status", Status.PROCESSING);
                     model.addAttribute("categories", categoryServiceService.findAll());
                     return "car/car";
@@ -83,7 +77,7 @@ public class CarController {
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("car", car);
             redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
-            return "redirect:/cars/";
+            return "redirect:/cars/create";
         }
         return "redirect:/cars/" + carService.create(car).getId();
     }

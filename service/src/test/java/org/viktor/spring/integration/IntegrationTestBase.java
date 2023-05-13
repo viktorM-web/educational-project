@@ -10,7 +10,7 @@ import org.viktor.spring.integration.annotation.IT;
 
 @IT
 @Sql("classpath:sql/data.sql")
-@WithMockUser(username = "test@gmail.com", password = "test", authorities = {"ADMIN", "CLIENT"})
+@WithMockUser(username = "ivan@mail.ru", password = "123", authorities = {"ADMIN"})
 public abstract class IntegrationTestBase {
 
     private static final PostgreSQLContainer<?> container = new PostgreSQLContainer<>("postgres:15.1");

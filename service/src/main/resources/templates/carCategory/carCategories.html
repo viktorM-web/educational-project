@@ -5,7 +5,10 @@
     <title>Car categories</title>
 </head>
 <body>
-<form action="/carCategories">
+<div th:insert="~{fragment :: header}"></div>
+
+<div th:insert="~{fragment :: profile}"></div>
+<form action="/car-categories">
     <label for="category">Category
         <input id="category" type="text" name="category" th:value="${filter.category}">
     </label>
@@ -14,16 +17,16 @@
     </label>
     <div>
         <label for="page">Page
-            <input id="page" type="number" name="page" th:value="${users.metadata.page}">
+            <input id="page" type="number" name="page" th:value="${carCategories.metadata.page}">
         </label>
         <label for="size">Size
-            <input id="size" type="number" name="size" th:value="${users.metadata.size}">
+            <input id="size" type="number" name="size" th:value="${carCategories.metadata.size}">
         </label>
     </div>
     <button type="submit">Filter</button>
 </form>
 <div th:each="category : ${carCategories.content}">
-    <a th:href="@{'/carCategories/' + ${category.id}}"
+    <a th:href="@{'/car-categories/' + ${category.id}}"
        th:text="|${category.category}. ${category.dayPrice}|">Category</a>
 </div>
 </body>

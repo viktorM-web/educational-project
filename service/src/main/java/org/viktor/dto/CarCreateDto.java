@@ -1,6 +1,7 @@
 package org.viktor.dto;
 
 import lombok.Value;
+import lombok.experimental.FieldNameConstants;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Min;
@@ -10,6 +11,7 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
 @Value
+@FieldNameConstants
 public class CarCreateDto {
 
     @NotBlank(message = "VIN code shouldn't be empty")
@@ -33,8 +35,6 @@ public class CarCreateDto {
 
     @Min(1)
     Integer seatsQuantity;
-
-    @NotNull
     MultipartFile image;
 
     @Positive

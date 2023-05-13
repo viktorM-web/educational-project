@@ -1,6 +1,7 @@
 package org.viktor.dto;
 
 import lombok.Value;
+import lombok.experimental.FieldNameConstants;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.viktor.entity.Status;
 import org.viktor.validation.OrderData;
@@ -12,19 +13,26 @@ import javax.validation.constraints.Positive;
 import java.time.LocalDateTime;
 
 @Value
+@FieldNameConstants
 @OrderData(groups = CreateAction.class)
 public class OrderCreateDto {
 
+    @NotNull
     @Positive
     Integer userId;
 
+    @NotNull
     @Positive
     Integer carId;
 
+    @NotNull
     @Future
+//    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime startDateUse;
 
+    @NotNull
     @Future
+//    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime expirationDate;
 
     @NotNull

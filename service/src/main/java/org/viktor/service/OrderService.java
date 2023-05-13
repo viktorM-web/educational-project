@@ -13,7 +13,6 @@ import org.viktor.mapper.OrderReadMapper;
 import org.viktor.repository.OrderRepository;
 import org.viktor.repository.QPredicate;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.viktor.entity.QOrderEntity.orderEntity;
@@ -37,12 +36,6 @@ public class OrderService {
                 .buildAnd();
         return orderRepository.findAll(predicate, pageable)
                 .map(orderReadMapper::map);
-    }
-
-    public List<OrderReadDto> findAll() {
-        return orderRepository.findAll().stream()
-                .map(orderReadMapper::map)
-                .toList();
     }
 
     public Optional<OrderReadDto> findById(Integer id) {

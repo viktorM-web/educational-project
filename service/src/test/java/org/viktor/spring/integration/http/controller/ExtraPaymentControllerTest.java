@@ -18,68 +18,60 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-import static org.viktor.dto.UserCreateDto.Fields.email;
-import static org.viktor.dto.UserCreateDto.Fields.password;
-import static org.viktor.dto.UserCreateDto.Fields.role;
+import static org.viktor.dto.ExtraPaymentCreateDto.Fields.orderId;
+import static org.viktor.dto.ExtraPaymentCreateDto.Fields.description;
+import static org.viktor.dto.ExtraPaymentCreateDto.Fields.price;
+
 
 @AutoConfigureMockMvc
 @RequiredArgsConstructor
-class UserControllerTest extends IntegrationTestBase {
+class ExtraPaymentControllerTest extends IntegrationTestBase {
 
     private final MockMvc mockMvc;
 
     @Test
-    void registration() throws Exception {
-        mockMvc.perform(get("/users/registration"))
-                .andExpect(status().is2xxSuccessful())
-                .andExpect(view().name("user/registration"))
-                .andExpect(model().attributeExists("user"))
-                .andExpect(model().attributeExists("roles"));
-    }
-
-    @Test
-    void createWithError() throws Exception {
-        mockMvc.perform(post("/users").with(csrf())
-                        .param(email, "test")
-                        .param(password, "Test")
-                        .param(role, "ADMIN")
-                )
-                .andExpectAll(
-                        status().is3xxRedirection(),
-                        redirectedUrl("/users/registration")
-                );
-    }
-
-    @Test
     void create() throws Exception {
-        mockMvc.perform(post("/users").with(csrf())
-                        .param(email, "test@gmail.com")
-                        .param(password, "Test")
-                        .param(role, "ADMIN")
-                )
+        mockMvc.perform(post("/extra-payments").with(csrf())
+                        .param(orderId, "2")
+                        .param(description, "tests")
+                        .param(price, "111.11"))
                 .andExpectAll(
                         status().is3xxRedirection(),
-                        redirectedUrl("/login")
+                        redirectedUrl("/orders/2")
                 );
     }
 
     @Test
     void findById() throws Exception {
-        mockMvc.perform(get("/users/1")
+        mockMvc.perform(get("/extra-payments/1")
                         .with(user(
                                 new UserSecurity("ivan@mail.ru","123", List.of(Role.ADMIN), 1))))
                 .andExpect(status().is2xxSuccessful())
-                .andExpect(view().name("user/user"))
-                .andExpect(model().attributeExists("user"));
+                .andExpect(view().name("extraPayment/extraPayment"))
+                .andExpect(model().attributeExists("extraPayment"))
+                .andExpect(model().attributeExists("admin"));
+    }
+
+    @Test
+    void update() throws Exception {
+        mockMvc.perform(post("/extra-payments/1/update")
+                        .with(csrf())
+                .param(orderId, "1")
+                .param(description, "1")
+                .param(price, "111.05"))
+                .andExpectAll(
+                        status().is3xxRedirection(),
+                        redirectedUrl("/extra-payments/1")
+                );
     }
 
     @Test
     void delete() throws Exception {
-        mockMvc.perform(post("/users/1/delete")
+        mockMvc.perform(post("/extra-payments/1/delete")
                         .with(csrf()))
                 .andExpectAll(
                         status().is3xxRedirection(),
-                        redirectedUrl("/login")
+                        redirectedUrl("/extra-payments")
                 );
     }
 }

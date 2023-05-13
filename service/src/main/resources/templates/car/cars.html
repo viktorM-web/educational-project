@@ -5,11 +5,10 @@
     <title>Cars</title>
 </head>
 <body>
+<div th:insert="~{fragment :: header}"></div>
+
+<div th:insert="~{fragment :: profile}"></div>
 <form th:action="@{/cars}">
-
-    <div th:insert="~{fragment :: header}"></div>
-
-    <div th:insert="~{fragment :: profile}"></div>
 
     <label for="brand">Brand
         <input id="brand" type="text" name="brand" th:value="${filter.brand}">

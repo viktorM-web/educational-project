@@ -2,9 +2,12 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Creat Car</title>
+    <title>Create Car</title>
 </head>
 <body>
+<div th:insert="~{fragment :: header}"></div>
+
+<div th:insert="~{fragment :: profile}"></div>
 <form th:action="@{/cars}" enctype="multipart/form-data" method="post">
     <label for="vinCode"> Vin code:
         <input id="vinCode" type="text" name="vinCode" th:value="*{car.vinCode}">
@@ -29,10 +32,10 @@
     </label>
     <div>
         <label for="category">Car category:
-            <select id="category" name="carCategory">
+            <select id="category" name="carCategoryId">
                 <option th:each="categoty : ${categories}"
                         th:value="${categoty.id}"
-                        th:selected="${categoty.id == car.carCategory.id}"
+                        th:if="${car!=null}":th:selected="${categoty.id == car.carCategory.id}"
                         th:text="|${categoty.category} ${categoty.dayPrice}|">Category
                 </option>
             </select>
