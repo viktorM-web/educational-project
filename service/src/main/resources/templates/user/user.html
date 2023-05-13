@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User</title>
+</head>
+<body>
+<div th:if="${user.role.name == 'ADMIN'}">
+    <p th:text="|Welcom ${user.role} ${user.email}|">text</p>
+</div>
+
+<div th:if="${user.role.name == 'CLIENT'}">
+    <p th:text="|Welcom ${user.role} ${user.email}|">text</p>
+</div>
+<form th:action="@{/users/{userId}/delete(userId=${user.id})}" method="post">
+    <button type="submit">Remove</button>
+</form>
+<form th:action="@{/cars}">
+    <button type="submit">Select car</button>
+</form>
+</body>
+</html>

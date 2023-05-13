@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Car categories</title>
+</head>
+<body>
+<form action="/carCategories">
+    <label for="category">Category
+        <input id="category" type="text" name="category" th:value="${filter.category}">
+    </label>
+    <label for="dayPrice">Day price
+        <input id="dayPrice" type="text" name="dayPrice" th:value="${filter.dayPrice}">
+    </label>
+    <div>
+        <label for="page">Page
+            <input id="page" type="number" name="page" th:value="${users.metadata.page}">
+        </label>
+        <label for="size">Size
+            <input id="size" type="number" name="size" th:value="${users.metadata.size}">
+        </label>
+    </div>
+    <button type="submit">Filter</button>
+</form>
+<div th:each="category : ${carCategories.content}">
+    <a th:href="@{'/carCategories/' + ${category.id}}"
+       th:text="|${category.category}. ${category.dayPrice}|">Category</a>
+</div>
+</body>
+</html>

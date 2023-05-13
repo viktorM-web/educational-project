@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cars</title>
+</head>
+<body>
+<form action="/cars">
+    <label for="brand">Brand
+        <input id="brand" type="text" name="brand" th:value="${filter.brand}">
+    </label>
+    <label for="model">Model
+        <input id="model" type="text" name="model" th:value="${filter.model}">
+    </label>
+    <label for="olderYearIssue">Older year issue
+        <input id="olderYearIssue" type="number" name="olderYearIssue" th:value="${filter.olderYearIssue}">
+    </label>
+    <label for="colour">Colour
+        <input id="colour" type="text" name="colour" th:value="${filter.colour}">
+    </label>
+    <label for="minSeatsQuantity">Min seats quantity
+        <input id="minSeatsQuantity" type="number" name="minSeatsQuantity" th:value="${filter.minSeatsQuantity}">
+    </label>
+    <label for="category">Category
+        <input id="category" type="text" name="category" th:value="${filter.category}">
+    </label>
+    <label for="maxDayPrice">Max day price
+        <input id="maxDayPrice" type="text" name="maxDayPrice" th:value="${filter.maxDayPrice}">
+    </label>
+    <div>
+        <label for="page">Page
+            <input id="page" type="number" name="page" th:value="${cars.metadata.page}">
+        </label>
+        <label for="size">Size
+            <input id="size" type="number" name="size" th:value="${cars.metadata.size}">
+        </label>
+    </div>
+    <button type="submit">Filter</button>
+</form>
+<div th:each="car : ${cars.content}">
+    <label th:if="${car.image}">
+        <img th:src="@{/api/v1/cars/{carId}/avatar(carId=${car.id})}" alt="Car image">
+    </label>
+    <a th:href="@{'/cars/' + ${car.id}}" th:text="|${car.getBrand()} ${car.model} ${car.carCategory.dayPrice} |">Car</a>
+</div>
+</body>
+</html>

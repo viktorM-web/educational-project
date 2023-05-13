@@ -9,6 +9,7 @@ import org.viktor.entity.UserEntity;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -17,6 +18,13 @@ class UserRepositoryTest extends IntegrationTestBase {
 
     private final UserRepository userRepository;
     private final EntityManager entityManager;
+
+    @Test
+    void findByEmailAndPassword(){
+        Optional<UserEntity> result = userRepository.findByEmailAndPassword("ivan@mail.ru", String.valueOf(123));
+
+        assertThat(result.isPresent()).isTrue();
+    }
 
     @Test
     void save() {
