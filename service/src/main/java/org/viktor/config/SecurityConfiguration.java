@@ -44,6 +44,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .oauth2Login(config -> config
                         .loginPage("/login")
                         .defaultSuccessUrl("/cars")
+
                         .userInfoEndpoint(userInfo -> userInfo.oidcUserService(oidcUserService())
                         )
                 );
