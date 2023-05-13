@@ -1,5 +1,7 @@
 Rental car booking progect
 ![image](https://github.com/viktorM-web/educational-project/assets/81855790/7f4972a1-d8ed-483e-9f0e-5434cacfdcb5)
+
+
 The project was completed in accordance with the following requirements:
 
 -The project must be built using Apache Maven (Gradle optional)
