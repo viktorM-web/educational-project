@@ -88,7 +88,7 @@ class CarRepositoryTest extends IntegrationTestBase {
         List<Integer> actualId = actualResult.stream().map(CarEntity::getId).collect(toList());
 
         assertThat(actualResult).hasSize(expectedResult.size());
-//        assertThat(actualId).containsAll(expectedResult);
+        assertThat(actualId).containsAll(expectedResult);
     }
 
     public static Stream<Arguments> carFilterDataProvider() {

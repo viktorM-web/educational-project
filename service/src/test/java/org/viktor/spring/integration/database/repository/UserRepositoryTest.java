@@ -65,11 +65,22 @@ class UserRepositoryTest extends IntegrationTestBase {
     }
 
     @Test
+    void findByEmail() {
+        UserEntity user = saveUser();
+        entityManager.clear();
+
+        UserEntity expectedUser = userRepository.findByEmail(user.getEmail()).get();
+        entityManager.clear();
+
+        assertThat(expectedUser.getEmail()).isEqualTo("TEST@mail.ru");
+    }
+
+    @Test
     void findAll() {
         List<UserEntity> expectedUser = userRepository.findAll();
         entityManager.clear();
 
-        assertThat(expectedUser).hasSize(2);
+        assertThat(expectedUser).hasSize(4);
     }
 
     private UserEntity saveUser() {

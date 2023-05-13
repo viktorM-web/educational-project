@@ -2,6 +2,10 @@ package org.viktor.spring.integration.database.repository;
 
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.viktor.dto.CarFilterDto;
 import org.viktor.repository.CarCategoryRepository;
 import org.viktor.repository.CarRepository;
 import org.viktor.repository.OrderRepository;
@@ -15,8 +19,11 @@ import org.viktor.entity.Status;
 import org.viktor.entity.UserEntity;
 
 import javax.persistence.EntityManager;
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Stream;
 
+import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RequiredArgsConstructor
@@ -80,6 +87,23 @@ class OrderRepositoryTest extends IntegrationTestBase {
         entityManager.clear();
 
         assertThat(expectedOrder).hasSize(2);
+    }
+
+    @ParameterizedTest
+    @MethodSource("orderDataProvider")
+    void findAllByCarId(Integer carId, List<OrderEntity> expectedResult) {
+        List<OrderEntity> actualResult = orderRepository.findAllByCarId(carId);
+        List<Integer> actualId = actualResult.stream().map(OrderEntity::getId).collect(toList());
+
+        assertThat(actualId).isEqualTo(expectedResult);
+    }
+
+    public static Stream<Arguments> orderDataProvider() {
+        return Stream.of(
+                Arguments.of(1, List.of()),
+                Arguments.of(2, List.of()),
+                Arguments.of(9, List.of(1, 2))
+        );
     }
 
     private OrderEntity saveOrder() {

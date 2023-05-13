@@ -33,7 +33,6 @@ public class ClientDataEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-
     private UserEntity user;
     private String firstname;
     private String lastname;

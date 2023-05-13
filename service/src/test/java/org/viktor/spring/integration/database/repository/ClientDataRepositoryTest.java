@@ -68,6 +68,17 @@ class ClientDataRepositoryTest extends IntegrationTestBase {
     }
 
     @Test
+    void findByUserId() {
+        ClientDataEntity clientData = saveClient();
+        entityManager.clear();
+
+        ClientDataEntity expectedClientData = clientDataRepository.findByUserId(clientData.getUser().getId()).get();
+        entityManager.clear();
+
+        assertThat(expectedClientData.getDriverLicenceNo()).isEqualTo("7777777777");
+    }
+
+    @Test
     void findAll() {
         List<ClientDataEntity> expectedClientData = clientDataRepository.findAll();
         entityManager.clear();

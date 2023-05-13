@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Client registration</title>
+</head>
+<body>
+<div th:insert="~{fragment :: locale}"></div>
+<form th:action="@{'/clients/' + ${#authorization.authentication.principal.id}}" method="post" th:object="${client}">
+    <label for="firstname"> Firstname:
+        <input id="firstname" type="text" name="firstname" th:value="*{firstname}">
+    </label><br>
+    <label for="lastname"> Lastname:
+        <input id="lastname" type="text" name="lastname" th:value="*{lastname}">
+    </label><br>
+    <label for="birthday"> Birthday:
+        <input id="birthday" type="date" name="birthday" th:value="*{birthday}">
+    </label><br>
+    <label for="licence"> Driver Licence No:
+        <input id="licence" type="text" name="driverLicenceNo" th:value="*{driverLicenceNo}">
+    </label><br>
+    <label for="dateExpiry"> Date expiry licence:
+        <input id="dateExpiry" type="date" name="dateExpiry" th:value="*{dateExpiry}">
+    </label><br>
+    <label for="driverExperience"> Driver experience:
+        <input id="driverExperience" type="number" name="driverExperience" th:value="*{driverExperience}">
+    </label><br>
+    <div>
+        <button type="submit">Register</button>
+    </div>
+</form>
+<div th:if="${errors}">
+    <p style="color: red" th:each="error : ${errors}" th:text="${error.defaultMessage}">Error message</p>
+</div>
+</body>
+</html>

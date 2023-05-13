@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Category</title>
+</head>
+<body>
+<div th:insert="~{fragment :: header}"></div>
+
+<div th:insert="~{fragment :: profile}"></div>
+<form th:action="@{/car-categories}" enctype="multipart/form-data" method="post">
+    <label for="category"> Category:
+        <input id="category" type="text" name="category" th:value="${category.category}">
+    </label><br>
+    <label for="dayPrice"> Day price:
+        <input id="dayPrice" type="text" name="dayPrice" th:value="${category.dayPrice}">
+    </label><br>
+    <button type="submit">Create</button>
+</form>
+<div th:if="${errors}">
+    <p style="color: red" th:each="error : ${errors}" th:text="${error.defaultMessage}">Error message</p>
+</div>
+</body>
+</html>

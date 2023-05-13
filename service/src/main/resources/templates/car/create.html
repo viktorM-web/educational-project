@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Car</title>
+</head>
+<body>
+<div th:insert="~{fragment :: header}"></div>
+
+<div th:insert="~{fragment :: profile}"></div>
+<form th:action="@{/cars}" enctype="multipart/form-data" method="post">
+    <label for="vinCode"> Vin code:
+        <input id="vinCode" type="text" name="vinCode" th:value="*{car.vinCode}">
+    </label><br>
+    <label for="brand"> Brand:
+        <input id="brand" type="text" name="brand" th:value="*{car.brand}">
+    </label><br>
+    <label for="model"> Model:
+        <input id="model" type="text" name="model" th:value="*{car.model}">
+    </label><br>
+    <label for="yearIssue"> Year issue:
+        <input id="yearIssue" type="number" name="yearIssue" th:value="*{car.yearIssue}">
+    </label><br>
+    <label for="colour"> Colour:
+        <input id="colour" type="text" name="colour" th:value="*{car.colour}">
+    </label><br>
+    <label for="seatsQuantity"> Seats quantity:
+        <input id="seatsQuantity" type="number" name="seatsQuantity" th:value="*{car.seatsQuantity}">
+    </label><br>
+    <label for="image"> Image:
+        <input id="image" type="file" name="image">
+    </label>
+    <div>
+        <label for="category">Car category:
+            <select id="category" name="carCategoryId">
+                <option th:each="categoty : ${categories}"
+                        th:value="${categoty.id}"
+                        th:if="${car!=null}":th:selected="${categoty.id == car.carCategory.id}"
+                        th:text="|${categoty.category} ${categoty.dayPrice}|">Category
+                </option>
+            </select>
+        </label><br>
+    </div>
+    <button type="submit">Create</button>
+</form>
+<div th:if="${errors}">
+    <p style="color: red" th:each="error : ${errors}" th:text="${error.defaultMessage}">Error message</p>
+</div>
+</body>
+</html>

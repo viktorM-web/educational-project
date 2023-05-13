@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User</title>
+</head>
+<body>
+<div th:insert="~{fragment::header}"/>
+
+<p th:text="|Welcom ${user.role}|">text</p>
+<div th:if="${user.role.name == 'ADMIN'}">
+    <form th:action="@{/cars/create}">
+        <button type="submit">CREATE CAR</button>
+    </form>
+
+    <form th:action="@{/car-categories/create}">
+        <button type="submit">CREATE CAR CATEGORY</button>
+    </form>
+
+    <form th:action="@{/car-categories}">
+        <button type="submit">CAR CATEGORIES</button>
+    </form>
+
+</div>
+
+<form th:action="@{/users/{userId}/delete(userId=${user.id})}" method="post">
+    <button type="submit">Remove</button>
+</form>
+
+<form th:action="@{/cars}">
+    <button type="submit">Select car</button>
+</form>
+<form th:action="@{/orders}">
+    <button type="submit">Orders</button>
+</form>
+<form th:action="@{'/clients/'+${#authorization.authentication.principal.id}}">
+    <button type="submit">Client data</button>
+</form>
+</body>
+</html>
