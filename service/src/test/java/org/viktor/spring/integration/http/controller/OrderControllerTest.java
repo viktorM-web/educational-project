@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.test.web.servlet.MockMvc;
-import org.viktor.dto.OrderCreateDto;
 import org.viktor.entity.Role;
 import org.viktor.security.UserSecurity;
 import org.viktor.spring.integration.IntegrationTestBase;
@@ -52,8 +51,8 @@ class OrderControllerTest extends IntegrationTestBase {
         mockMvc.perform(post("/orders").with(csrf())
                         .param(userId, "1")
                         .param(carId, "1")
-                        .param(startDateUse, "2020-09-01 00:00:00")
-                        .param(expirationDate, "2020-09-02 00:00:00")
+                        .param(startDateUse, "2020-09-01T00:00")
+                        .param(expirationDate, "2020-09-02T00:00")
                         .param(status, "PROCESSING")
                 )
                 .andExpectAll(
@@ -67,8 +66,8 @@ class OrderControllerTest extends IntegrationTestBase {
         mockMvc.perform(post("/orders").with(csrf())
                         .param(userId, "1")
                         .param(carId, "1")
-                        .param(startDateUse, "2023-09-01 00:00:00")
-                        .param(expirationDate, "2023-09-02 00:00:00")
+                        .param(startDateUse, "2023-09-01T00:00")
+                        .param(expirationDate, "2023-09-02T00:00")
                         .param(status, "PROCESSING")
                 )
                 .andExpectAll(
